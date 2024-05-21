@@ -23,12 +23,12 @@ app.use(
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
-  })
+  }),
 );
 app.use(express.json());
 
 app.use(
-  session({ secret: 'secret234563', resave: false, saveUninitialized: true })
+  session({ secret: 'secret234563', resave: false, saveUninitialized: true }),
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -58,8 +58,8 @@ passport.use(
       } catch (error) {
         return done(error, null);
       }
-    }
-  )
+    },
+  ),
 );
 
 passport.serializeUser((user, done) => done(null, user.id));
@@ -174,18 +174,20 @@ app.get('/', (req, res) => {
 
 app.post('/register', async (req, res) => {
   const { displayName, email, password } = req.body;
-  if (!displayName || !email || !password)
+  if (!displayName || !email || !password) {
     return res
       .status(400)
       .json({ success: false, message: 'Harap isi semua bidang coy!!!' });
+  }
 
   try {
     let user = await Userdb.findOne({ email });
-    if (user)
+    if (user) {
       return res.status(400).json({
         success: false,
         message: 'Waduh email sudah terdaftar nampaknya',
       });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     user = new Userdb({ displayName, email, password: hashedPassword });
@@ -205,17 +207,19 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password)
+  if (!email || !password) {
     return res
       .status(400)
       .json({ success: false, message: 'Harap isi semua bidang coy!!!' });
+  }
 
   try {
     const user = await Userdb.findOne({ email });
-    if (!user)
+    if (!user) {
       return res
         .status(400)
         .json({ success: false, message: 'Waduh mail tidak ditemukan nih!' });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
@@ -240,7 +244,9 @@ app.post('/login', async (req, res) => {
 
     return res
       .status(200)
-      .json({ success: true, message: 'Login berhasil', token, user });
+      .json({
+        success: true, message: 'Login berhasil', token, user,
+      });
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -252,23 +258,24 @@ app.post('/login', async (req, res) => {
 
 app.get(
   '/auth/google',
-  passport.authenticate('google', { scope: ['email', 'profile'] })
+  passport.authenticate('google', { scope: ['email', 'profile'] }),
 );
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', {
     successRedirect: 'https://your-frontend-domain.vercel.app/dashboard',
     failureRedirect: 'https://your-frontend-domain.vercel.app/login',
-  })
+  }),
 );
 
 app.get('/login/success', async (req, res) => {
-  if (req.user)
+  if (req.user) {
     return res.status(200).json({
       success: true,
       message: 'user berhasil diautentikasi',
       user: req.user,
     });
+  }
   return res
     .status(401)
     .json({ success: false, message: 'user belum melakukan autentikasi' });
