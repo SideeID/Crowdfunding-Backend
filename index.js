@@ -1,23 +1,76 @@
 require('dotenv').config();
 const express = require('express');
-
-const app = express();
 const cors = require('cors');
-require('./src/db/mongo');
-
-const PORT = process.env.PORT || 6005;
 const session = require('express-session');
 const passport = require('passport');
 const OAuth2Strategy = require('passport-google-oauth2').Strategy;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Userdb = require('./src/model/userSchema');
+require('./src/db/mongo'); // Ensure this is optimized for serverless
+
+const app = express();
+const PORT = process.env.PORT || 6005;
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const { JWT_SECRET } = process.env;
 
 const MAX_LOGIN_ATTEMPTS = 5;
+
+app.use(
+  cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+  })
+);
+app.use(express.json());
+
+app.use(
+  session({ secret: 'secret234563', resave: false, saveUninitialized: true })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(
+  new OAuth2Strategy(
+    {
+      clientID: clientId,
+      clientSecret,
+      callbackURL:
+        'https://crowdfunding-backend-delta.vercel.app/auth/google/callback',
+      scope: ['email', 'profile'],
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        let user = await Userdb.findOne({ googleId: profile.id });
+        if (!user) {
+          user = new Userdb({
+            googleId: profile.id,
+            displayName: profile.displayName,
+            email: profile.emails[0].value,
+            image: profile.photos[0].value,
+          });
+          await user.save();
+        }
+        return done(null, user);
+      } catch (error) {
+        return done(error, null);
+      }
+    }
+  )
+);
+
+passport.serializeUser((user, done) => done(null, user.id));
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await Userdb.findById(id);
+    return done(null, user);
+  } catch (error) {
+    return done(error, null);
+  }
+});
 
 app.get('/', (req, res) => {
   res.send(`
@@ -119,109 +172,28 @@ app.get('/', (req, res) => {
   `);
 });
 
-app.use(
-  cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
-  }),
-);
-app.use(express.json());
-
-// setup session
-app.use(
-  session({
-    secret: 'secret234563',
-    resave: false,
-    saveUninitialized: true,
-  }),
-);
-
-// setup passport
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.use(
-  new OAuth2Strategy(
-    {
-      clientID: clientId,
-      clientSecret,
-      callbackURL:
-        'https://crowdfunding-backend-delta.vercel.app/auth/google/callback',
-      scope: ['email', 'profile'],
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        let user = await Userdb.findOne({ googleId: profile.id });
-
-        if (!user) {
-          user = new Userdb({
-            googleId: profile.id,
-            displayName: profile.displayName,
-            email: profile.emails[0].value,
-            image: profile.photos[0].value,
-          });
-
-          await user.save();
-        }
-
-        return done(null, user);
-      } catch (error) {
-        return done(error, null);
-      }
-    }
-  )
-);
-
-// serialize user
-passport.serializeUser((user, done) => done(null, user.id));
-
-// deserialize user
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await Userdb.findById(id);
-    return done(null, user);
-  } catch (error) {
-    return done(error, null);
-  }
-});
-
-// Endpoint untuk registrasi manual
 app.post('/register', async (req, res) => {
   const { displayName, email, password } = req.body;
-
-  if (!displayName || !email || !password) {
-    return res.status(400).json({
-      success: false,
-      message: 'Harap isi semua bidang coy!!!',
-    });
-  }
+  if (!displayName || !email || !password)
+    return res
+      .status(400)
+      .json({ success: false, message: 'Harap isi semua bidang coy!!!' });
 
   try {
     let user = await Userdb.findOne({ email });
-
-    if (user) {
+    if (user)
       return res.status(400).json({
         success: false,
         message: 'Waduh email sudah terdaftar nampaknya',
       });
-    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    user = new Userdb({
-      displayName,
-      email,
-      password: hashedPassword,
-    });
-
+    user = new Userdb({ displayName, email, password: hashedPassword });
     await user.save();
 
-    return res.status(201).json({
-      success: true,
-      message: 'Registrasi berhasil',
-      user,
-    });
+    return res
+      .status(201)
+      .json({ success: true, message: 'Registrasi berhasil', user });
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -231,34 +203,25 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// Endpoint untuk login manual
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).json({
-      success: false,
-      message: 'Harap isi semua bidang coy!!!',
-    });
-  }
+  if (!email || !password)
+    return res
+      .status(400)
+      .json({ success: false, message: 'Harap isi semua bidang coy!!!' });
 
   try {
     const user = await Userdb.findOne({ email });
-
-    if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: 'Waduh mail tidak ditemukan nih!',
-      });
-    }
+    if (!user)
+      return res
+        .status(400)
+        .json({ success: false, message: 'Waduh mail tidak ditemukan nih!' });
 
     const isMatch = await bcrypt.compare(password, user.password);
-
     if (!isMatch) {
       req.session.loginAttempts = req.session.loginAttempts
         ? req.session.loginAttempts + 1
         : 1;
-
       if (req.session.loginAttempts >= MAX_LOGIN_ATTEMPTS) {
         return res.status(401).json({
           success: false,
@@ -267,23 +230,17 @@ app.post('/login', async (req, res) => {
             'Masukin password yang bener dong! gitu aja ga bisa, lihat tu tetangga sebelah udah kawin semua, lu masih aja ga bisa login, yang bener aja!',
         });
       }
-
-      return res.status(400).json({
-        success: false,
-        message: 'Password salah',
-      });
+      return res
+        .status(400)
+        .json({ success: false, message: 'Password salah' });
     }
 
     delete req.session.loginAttempts;
-
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
 
-    return res.status(200).json({
-      success: true,
-      message: 'Login berhasil',
-      token,
-      user,
-    });
+    return res
+      .status(200)
+      .json({ success: true, message: 'Login berhasil', token, user });
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -293,47 +250,34 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// initial google auth login
 app.get(
   '/auth/google',
-  passport.authenticate('google', {
-    scope: ['email', 'profile'],
-  }),
+  passport.authenticate('google', { scope: ['email', 'profile'] })
 );
-
-// callback after google auth login
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', {
-    successRedirect: 'http://localhost:3000/dashboard',
-    failureRedirect: 'http://localhost:3000/login',
-  }),
+    successRedirect: 'https://your-frontend-domain.vercel.app/dashboard',
+    failureRedirect: 'https://your-frontend-domain.vercel.app/login',
+  })
 );
 
-// check login status
 app.get('/login/success', async (req, res) => {
-  console.log('req.user', req.user);
-
-  if (req.user) {
+  if (req.user)
     return res.status(200).json({
       success: true,
       message: 'user berhasil diautentikasi',
       user: req.user,
     });
-  }
-  return res.status(401).json({
-    success: false,
-    message: 'user belum melakukan autentikasi',
-  });
+  return res
+    .status(401)
+    .json({ success: false, message: 'user belum melakukan autentikasi' });
 });
 
-// logout
 app.get('/logout', (req, res, next) => {
   req.logout((err) => {
-    if (err) {
-      return next(err);
-    }
-    return res.redirect('http://localhost:3000');
+    if (err) return next(err);
+    return res.redirect('https://your-frontend-domain.vercel.app');
   });
 });
 
