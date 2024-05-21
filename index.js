@@ -146,7 +146,8 @@ passport.use(
     {
       clientID: clientId,
       clientSecret,
-      callbackURL: '/auth/google/callback',
+      callbackURL:
+        'https://crowdfunding-backend-delta.vercel.app/auth/google/callback',
       scope: ['email', 'profile'],
     },
     async (accessToken, refreshToken, profile, done) => {
@@ -168,8 +169,8 @@ passport.use(
       } catch (error) {
         return done(error, null);
       }
-    },
-  ),
+    }
+  )
 );
 
 // serialize user
