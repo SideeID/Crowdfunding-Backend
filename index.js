@@ -7,7 +7,7 @@ const OAuth2Strategy = require('passport-google-oauth2').Strategy;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Userdb = require('./src/model/userSchema');
-require('./src/db/mongo'); // Ensure this is optimized for serverless
+require('./src/db/mongo');
 
 const app = express();
 const PORT = process.env.PORT || 6005;
