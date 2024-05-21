@@ -3,7 +3,7 @@ const express = require('express');
 
 const app = express();
 const cors = require('cors');
-require('./db/mongo');
+require('./src/db/mongo');
 
 const PORT = process.env.PORT || 6005;
 const session = require('express-session');
@@ -11,7 +11,7 @@ const passport = require('passport');
 const OAuth2Strategy = require('passport-google-oauth2').Strategy;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const Userdb = require('./model/userSchema');
+const Userdb = require('./src/model/userSchema');
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
