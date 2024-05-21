@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon ./src/app.js",
+    "lint:fix": "eslint ./src --fix",
+    "lint": "eslint ./src"
   },
   "author": "",
   "license": "ISC",
@@ -20,5 +22,10 @@
     "nodemon": "^3.1.0",
     "passport": "^0.7.0",
     "passport-google-oauth2": "^0.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1"
   }
 }

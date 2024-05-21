@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
     image: String,
     password: String,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const userdb = mongoose.model('users', userSchema);

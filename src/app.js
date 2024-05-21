@@ -1,17 +1,23 @@
 require('dotenv').config();
 const express = require('express');
+
 const app = express();
 const cors = require('cors');
 require('./db/mongo');
+
 const PORT = process.env.PORT || 6005;
 const session = require('express-session');
 const passport = require('passport');
 const OAuth2Strategy = require('passport-google-oauth2').Strategy;
-const userdb = require('./model/userSchema');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const Userdb = require('./model/userSchema');
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
+const { JWT_SECRET } = process.env;
 
+const MAX_LOGIN_ATTEMPTS = 5;
 
 app.get('/', (req, res) => {
   res.send(`
@@ -38,6 +44,16 @@ app.get('/', (req, res) => {
     }
     </pre>
     <p>Request harus berupa metode HTTP POST dan berisi data pengguna yang ingin didaftarkan.</p>
+
+    <h3>/login</h3>
+    <p>Request untuk login pengguna:</p>
+    <pre>
+    {
+      "email": "email@example.com",
+      "password": "password"
+    }
+    </pre>
+    <p>Request harus berupa metode HTTP POST dan berisi data pengguna yang ingin login.</p>
 
     <h2>Response</h2>
     <h3>/login/success</h3>
@@ -108,7 +124,7 @@ app.use(
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
-  })
+  }),
 );
 app.use(express.json());
 
@@ -118,7 +134,7 @@ app.use(
     secret: 'secret234563',
     resave: false,
     saveUninitialized: true,
-  })
+  }),
 );
 
 // setup passport
@@ -129,16 +145,16 @@ passport.use(
   new OAuth2Strategy(
     {
       clientID: clientId,
-      clientSecret: clientSecret,
+      clientSecret,
       callbackURL: '/auth/google/callback',
       scope: ['email', 'profile'],
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        let user = await userdb.findOne({ googleId: profile.id });
+        let user = await Userdb.findOne({ googleId: profile.id });
 
         if (!user) {
-          user = new userdb({
+          user = new Userdb({
             googleId: profile.id,
             displayName: profile.displayName,
             email: profile.emails[0].value,
@@ -152,22 +168,127 @@ passport.use(
       } catch (error) {
         return done(error, null);
       }
-    }
-  )
+    },
+  ),
 );
 
 // serialize user
-passport.serializeUser((user, done) => {
-  return done(null, user.id);
-});
+passport.serializeUser((user, done) => done(null, user.id));
 
 // deserialize user
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await userdb.findById(id);
+    const user = await Userdb.findById(id);
     return done(null, user);
   } catch (error) {
     return done(error, null);
+  }
+});
+
+// Endpoint untuk registrasi manual
+app.post('/register', async (req, res) => {
+  const { displayName, email, password } = req.body;
+
+  if (!displayName || !email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: 'Harap isi semua bidang coy!!!',
+    });
+  }
+
+  try {
+    let user = await Userdb.findOne({ email });
+
+    if (user) {
+      return res.status(400).json({
+        success: false,
+        message: 'Waduh email sudah terdaftar nampaknya',
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    user = new Userdb({
+      displayName,
+      email,
+      password: hashedPassword,
+    });
+
+    await user.save();
+
+    return res.status(201).json({
+      success: true,
+      message: 'Registrasi berhasil',
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Terjadi kesalahan pada server',
+      error: error.message,
+    });
+  }
+});
+
+// Endpoint untuk login manual
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: 'Harap isi semua bidang coy!!!',
+    });
+  }
+
+  try {
+    const user = await Userdb.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: 'Waduh mail tidak ditemukan nih!',
+      });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      req.session.loginAttempts = req.session.loginAttempts
+        ? req.session.loginAttempts + 1
+        : 1;
+
+      if (req.session.loginAttempts >= MAX_LOGIN_ATTEMPTS) {
+        return res.status(401).json({
+          success: false,
+          attempts: req.session.loginAttempts,
+          message:
+            'Masukin password yang bener dong! gitu aja ga bisa, lihat tu tetangga sebelah udah kawin semua, lu masih aja ga bisa login, yang bener aja!',
+        });
+      }
+
+      return res.status(400).json({
+        success: false,
+        message: 'Password salah',
+      });
+    }
+
+    delete req.session.loginAttempts;
+
+    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Login berhasil',
+      token,
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Terjadi kesalahan pada server',
+      error: error.message,
+    });
   }
 });
 
@@ -176,7 +297,7 @@ app.get(
   '/auth/google',
   passport.authenticate('google', {
     scope: ['email', 'profile'],
-  })
+  }),
 );
 
 // callback after google auth login
@@ -185,7 +306,7 @@ app.get(
   passport.authenticate('google', {
     successRedirect: 'http://localhost:3000/dashboard',
     failureRedirect: 'http://localhost:3000/login',
-  })
+  }),
 );
 
 // check login status
@@ -198,17 +319,16 @@ app.get('/login/success', async (req, res) => {
       message: 'user berhasil diautentikasi',
       user: req.user,
     });
-  } else {
-    return res.status(401).json({
-      success: false,
-      message: 'user belum melakukan autentikasi',
-    });
   }
+  return res.status(401).json({
+    success: false,
+    message: 'user belum melakukan autentikasi',
+  });
 });
 
 // logout
 app.get('/logout', (req, res, next) => {
-  req.logout(function (err) {
+  req.logout((err) => {
     if (err) {
       return next(err);
     }

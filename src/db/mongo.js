@@ -9,4 +9,4 @@ mongoose.connect(DB, {
   console.log('Connection successful ...');
 }).catch((err) => {
   console.log('No connection', err);
-})
+});
