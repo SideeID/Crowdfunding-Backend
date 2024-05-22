@@ -2,13 +2,14 @@ const loginSuccess = (req, res) => {
   if (req.user) {
     return res.status(200).json({
       success: true,
-      message: 'user berhasil diautentikasi',
-      user: req.user,
+      message: 'User berhasil diautentikasi',
+      user: req.user.user,
+      token: req.user.token,
     });
   }
   return res
     .status(401)
-    .json({ success: false, message: 'user belum melakukan autentikasi' });
+    .json({ success: false, message: 'User belum melakukan autentikasi' });
 };
 
 const logout = (req, res, next) => {
