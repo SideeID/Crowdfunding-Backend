@@ -23,12 +23,12 @@ app.use(
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
-  })
+  }),
 );
 app.use(express.json());
 
 app.use(
-  session({ secret: 'secret234563', resave: false, saveUninitialized: true })
+  session({ secret: 'secret234563', resave: false, saveUninitialized: true }),
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -39,7 +39,7 @@ passport.use(
       clientID: clientId,
       clientSecret,
       callbackURL:
-        'https://crowdfunding-backend-delta.vercel.app/auth/google/callback',
+        'https://crowdfunding-backend-drab.vercel.app/auth/google/callback',
       scope: ['email', 'profile'],
     },
     async (accessToken, refreshToken, profile, done) => {
@@ -58,8 +58,8 @@ passport.use(
       } catch (error) {
         return done(error, null);
       }
-    }
-  )
+    },
+  ),
 );
 
 passport.serializeUser((user, done) => done(null, user.id));
@@ -259,14 +259,14 @@ app.post('/login', async (req, res) => {
 
 app.get(
   '/auth/google',
-  passport.authenticate('google', { scope: ['email', 'profile'] })
+  passport.authenticate('google', { scope: ['email', 'profile'] }),
 );
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', {
     successRedirect: 'https://your-frontend-domain.vercel.app/dashboard',
     failureRedirect: 'https://your-frontend-domain.vercel.app/login',
-  })
+  }),
 );
 
 app.get('/login/success', async (req, res) => {
