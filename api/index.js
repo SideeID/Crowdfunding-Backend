@@ -6,8 +6,8 @@ const passport = require('passport');
 const OAuth2Strategy = require('passport-google-oauth2').Strategy;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const Userdb = require('./src/model/userSchema');
-require('./src/db/mongo');
+const Userdb = require('../src/model/userSchema');
+require('../src/db/mongo');
 
 const app = express();
 const PORT = process.env.PORT || 6005;
