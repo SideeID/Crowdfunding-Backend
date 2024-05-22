@@ -80,6 +80,7 @@ app.get('/', (req, res) => {
     <ul>
       <li><strong>GET /</strong>: Menampilkan dokumentasi API.</li>
       <li><strong>POST /register</strong>: Mendaftarkan pengguna baru.</li>
+      <li><strong>POST /login</strong>: Login pengguna.</li>
       <li><strong>GET /auth/google</strong>: Memulai proses autentikasi menggunakan Google OAuth2.</li>
       <li><strong>GET /auth/google/callback</strong>: Callback URL setelah autentikasi Google berhasil atau gagal.</li>
       <li><strong>GET /login/success</strong>: Mengecek status autentikasi pengguna dan mengembalikan informasi pengguna yang telah diautentikasi.</li>
@@ -236,7 +237,7 @@ app.post('/login', async (req, res) => {
       }
       return res
         .status(400)
-        .json({ success: false, message: 'Password salah' });
+        .json({ success: false, message: 'Password nya salah nih' });
     }
 
     delete req.session.loginAttempts;
