@@ -72,6 +72,7 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+// endpoint dokumentasi API
 app.get('/', (req, res) => {
   res.send(`
     <h1>API PENGGALANGAN DANA</h1>
@@ -81,6 +82,8 @@ app.get('/', (req, res) => {
       <li><strong>GET /</strong>: Menampilkan dokumentasi API.</li>
       <li><strong>POST /register</strong>: Mendaftarkan pengguna baru.</li>
       <li><strong>POST /login</strong>: Login pengguna.</li>
+      <li><strong>GET /user</strong>: Mendapatkan informasi pengguna yang telah diautentikasi.</li>
+      <li><strong>PUT /user</strong>: Memperbarui informasi pengguna yang telah diautentikasi.</li>
       <li><strong>GET /auth/google</strong>: Memulai proses autentikasi menggunakan Google OAuth2.</li>
       <li><strong>GET /auth/google/callback</strong>: Callback URL setelah autentikasi Google berhasil atau gagal.</li>
       <li><strong>GET /login/success</strong>: Mengecek status autentikasi pengguna dan mengembalikan informasi pengguna yang telah diautentikasi.</li>
@@ -108,6 +111,21 @@ app.get('/', (req, res) => {
     }
     </pre>
     <p>Request harus berupa metode HTTP POST dan berisi data pengguna yang ingin login.</p>
+
+    <h3>/user</h3>
+    <p>Request untuk mendapatkan informasi pengguna yang telah diautentikasi:</p>
+    <p>Request harus berupa metode HTTP GET dan menyertakan token autentikasi pada header.</p>
+
+    <h3>/user</h3>
+    <p>Request untuk memperbarui informasi pengguna yang telah diautentikasi:</p>
+    <pre>
+    {
+      "displayName": "Nama Pengguna",
+      "email": "email@exaple.com",
+      "password": "password"
+    }
+    </pre>
+    <p>Request harus berupa metode HTTP PUT dan menyertakan token autentikasi pada header.</p>
 
     <h2>Response</h2>
     <h3>/login/success</h3>
@@ -173,6 +191,7 @@ app.get('/', (req, res) => {
   `);
 });
 
+// endpoint registrasi pengguna
 app.post('/register', async (req, res) => {
   const { displayName, email, password } = req.body;
   if (!displayName || !email || !password) {
@@ -206,6 +225,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
+// endpoint login pengguna
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
@@ -258,10 +278,88 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// endpoint get user
+app.get('/user', async (req, res) => {
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      message: 'Token tidak ditemukan',
+    });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = await Userdb.findById(decoded.id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'Pengguna tidak ditemukan',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Pengguna ditemukan',
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Terjadi kesalahan pada server',
+      error: error.message,
+    });
+  }
+});
+
+// endpoint update user
+app.put('/user', async (req, res) => {
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      message: 'Token tidak ditemukan',
+    });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = await Userdb.findById(decoded.id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'Pengguna tidak ditemukan',
+      });
+    }
+
+    const { displayName, email, password } = req.body;
+    if (displayName) user.displayName = displayName;
+    if (email) user.email = email;
+    if (password) user.password = await bcrypt.hash(password, 10);
+
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Pengguna berhasil diperbarui',
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Terjadi kesalahan pada server',
+      error: error.message,
+    });
+  }
+});
+
+// endpoint autentikasi menggunakan Google OAuth2
 app.get(
   '/auth/google',
   passport.authenticate('google', { scope: ['email', 'profile'] }),
 );
+
+// callback URL setelah autentikasi Google berhasil atau gagal
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', {
@@ -270,6 +368,7 @@ app.get(
   }),
 );
 
+// endpoint untuk mengecek status autentikasi pengguna
 app.get('/login/success', async (req, res) => {
   if (req.user) {
     return res.status(200).json({
@@ -283,6 +382,7 @@ app.get('/login/success', async (req, res) => {
     .json({ success: false, message: 'user belum melakukan autentikasi' });
 });
 
+// endpoint logout
 app.get('/logout', (req, res, next) => {
   req.logout((err) => {
     if (err) return next(err);
