@@ -19,12 +19,15 @@ The backend is deployed on Vercel and can be accessed at [https://crowdfunding-b
 
 ## Endpoints
 
-- `POST /register`: Register a new user.
-- `POST /login`: Login with email/password.
-- `GET /auth/google`: Start Google OAuth2 authentication.
-- `GET /auth/google/callback`: Callback URL after Google authentication.
-- `GET /login/success`: Check user authentication status.
-- `GET /logout`: Logout the user.
+- `POST /users/register`: Mendaftarkan pengguna baru.
+- `POST /users/login`: Login pengguna dengan email/kata sandi.
+- `PUT /users/:id`: Memperbarui informasi pengguna berdasarkan ID.
+- `GET /users/:id`: Mendapatkan detail pengguna berdasarkan ID.
+- `GET /auth/google`: Memulai autentikasi Google OAuth2.
+- `GET /auth/google/callback`: URL callback setelah autentikasi Google.
+- `GET /auth/login/success`: Memeriksa status autentikasi pengguna.
+- `GET /auth/logout`: Logout pengguna.
+
 
 ## Technologies Used
 
