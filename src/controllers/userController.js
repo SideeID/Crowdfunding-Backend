@@ -72,7 +72,7 @@ const loginUser = async (req, res) => {
         return res.status(401).json({
           success: false,
           attempts: req.session.loginAttempts,
-          message: 'Terlalu banyak percobaan login. Coba lagi nanti.',
+          message: 'Masukin passwordnya bener dong! Gitu aja ga bisa, lihat tu tetangga sebelah udah pada nikah semua, lu masih aja ga bisa login, yang bener aja!',
         });
       }
       return res
@@ -125,21 +125,13 @@ const getUserById = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const { id } = req.params;
-
+  const userId = req.user._id;
   const {
     displayName, email, password, image,
   } = req.body;
 
-  if (!displayName && !email && !password && !image) {
-    return res.status(400).json({
-      success: false,
-      message: 'Harap isi setidaknya satu bidang untuk diperbarui!',
-    });
-  }
-
   try {
-    const user = await Userdb.findById(id);
+    const user = await Userdb.findById(userId);
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -147,19 +139,26 @@ const updateUser = async (req, res) => {
       });
     }
 
+    if (!displayName && !email && !password && !image) {
+      return res.status(400).json({
+        success: false,
+        message: 'Harap isi setidaknya satu bidang',
+      });
+    }
+
     if (displayName) user.displayName = displayName;
     if (email) user.email = email;
-    if (image) user.image = image;
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
       user.password = hashedPassword;
     }
+    if (image) user.image = image;
 
     await user.save();
 
     return res.status(200).json({
       success: true,
-      message: 'User berhasil diperbarui',
+      message: 'Profil pengguna berhasil diperbarui',
       user,
     });
   } catch (error) {
