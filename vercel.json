@@ -18,6 +18,10 @@
     {
       "src": "/auth/.*",
       "dest": "./src/routes/auth.js"
+    },
+    {
+      "src": "/fundraisers/.*",
+      "dest": "./src/routes/fundraiser.js"
     }
   ]
 }
