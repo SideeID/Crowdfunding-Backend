@@ -1,9 +1,11 @@
 const passport = require('passport');
 const OAuth2Strategy = require('passport-google-oauth2').Strategy;
+const jwt = require('jsonwebtoken');
 const Userdb = require('../model/userSchema');
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
+const { JWT_SECRET } = process.env;
 
 passport.use(
   new OAuth2Strategy(
@@ -26,7 +28,10 @@ passport.use(
           });
           await user.save();
         }
-        return done(null, user);
+        const token = jwt.sign({ id: user._id }, JWT_SECRET, {
+          expiresIn: '1h',
+        });
+        return done(null, { user, token });
       } catch (error) {
         return done(error, null);
       }
@@ -34,11 +39,11 @@ passport.use(
   ),
 );
 
-passport.serializeUser((user, done) => done(null, user.id));
-passport.deserializeUser(async (id, done) => {
+passport.serializeUser((data, done) => done(null, { id: data.user.id, token: data.token }));
+passport.deserializeUser(async (data, done) => {
   try {
-    const user = await Userdb.findById(id);
-    return done(null, user);
+    const user = await Userdb.findById(data.id);
+    return done(null, { user, token: data.token });
   } catch (error) {
     return done(error, null);
   }
