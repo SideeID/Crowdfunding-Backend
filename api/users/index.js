@@ -384,17 +384,12 @@ app.get('/login/success', async (req, res) => {
 });
 
 // endpoint logout
-// app.get('/logout', (req, res, next) => {
-//   req.logout((err) => {
-//     if (err) return next(err);
-//     return res.redirect('https://your-frontend-domain.vercel.app');
-//   });
-// });
-// endpoint logout
-app.get('/logout', (req, res) => {
-  req.logout();
+app.get('/logout', (req, res, next) => {
   req.session.destroy();
-  return res.redirect('https://your-frontend-domain.vercel.app');
+  req.logout((err) => {
+    if (err) return next(err);
+    return res.redirect('https://your-frontend-domain.vercel.app');
+  });
 });
 
 app.listen(PORT, () => {
