@@ -8,7 +8,23 @@
   ],
   "routes": [
     {
-      "src": "/.*",
+      "src": "/auth/(.*)",
+      "dest": "./index.js"
+    },
+    {
+      "src": "/users/(.*)",
+      "dest": "./index.js"
+    },
+    {
+      "src": "/auth/(.*)",
+      "dest": "./index.js"
+    },
+    {
+      "src": "/login/(.*)",
+      "dest": "./index.js"
+    },
+    {
+      "src": "/logout/(.*)",
       "dest": "./index.js"
     }
   ]

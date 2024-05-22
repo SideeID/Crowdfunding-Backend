@@ -1,5 +1,7 @@
 require('dotenv').config();
 const express = require('express');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const expressListRoutes = require('express-list-routes');
 const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
@@ -157,4 +159,5 @@ app.get('/', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  expressListRoutes(app);
 });
