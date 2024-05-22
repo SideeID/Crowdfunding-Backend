@@ -29,9 +29,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Use the routes
-app.use('/users', userRoutes);
-app.use('/auth', authRoutes);
 // endpoint dokumentasi API
 app.get('/', (req, res) => {
   res.send(`
@@ -156,6 +153,9 @@ app.get('/', (req, res) => {
     </pre>
   `);
 });
+
+app.use('/users', userRoutes);
+app.use('/auth', authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
