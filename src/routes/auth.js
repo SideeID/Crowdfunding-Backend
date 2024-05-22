@@ -8,13 +8,20 @@ router.get(
   '/google',
   passport.authenticate('google', { scope: ['email', 'profile'] }),
 );
+
 router.get(
   '/google/callback',
   passport.authenticate('google', {
-    successRedirect: 'https://your-frontend-domain.vercel.app/dashboard',
     failureRedirect: 'https://your-frontend-domain.vercel.app/login',
   }),
+  (req, res) => {
+    const { token } = req.user;
+    res.redirect(
+      `https://your-frontend-domain.vercel.app/dashboard?token=${token}`,
+    );
+  },
 );
+
 router.get('/login/success', loginSuccess);
 router.get('/logout', logout);
 
