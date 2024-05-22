@@ -15,6 +15,6 @@ router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.get('/profile', authMiddleware, getOwnProfile);
 router.get('/:id', getUserById);
-router.put('/:id', updateUser);
+router.put('/:id', authMiddleware, updateUser);
 
 module.exports = router;
