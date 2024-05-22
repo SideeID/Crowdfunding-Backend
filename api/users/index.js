@@ -267,7 +267,7 @@ app.post('/login', async (req, res) => {
       success: true,
       message: 'Login berhasil',
       token,
-      user,
+      user: req.user,
     });
   } catch (error) {
     return res.status(500).json({
@@ -371,6 +371,7 @@ app.get(
 // endpoint untuk mengecek status autentikasi pengguna
 app.get('/login/success', async (req, res) => {
   if (req.user) {
+    console.log(req.user);
     return res.status(200).json({
       success: true,
       message: 'user berhasil diautentikasi',
@@ -383,11 +384,17 @@ app.get('/login/success', async (req, res) => {
 });
 
 // endpoint logout
-app.get('/logout', (req, res, next) => {
-  req.logout((err) => {
-    if (err) return next(err);
-    return res.redirect('https://your-frontend-domain.vercel.app');
-  });
+// app.get('/logout', (req, res, next) => {
+//   req.logout((err) => {
+//     if (err) return next(err);
+//     return res.redirect('https://your-frontend-domain.vercel.app');
+//   });
+// });
+// endpoint logout
+app.get('/logout', (req, res) => {
+  req.logout();
+  req.session.destroy();
+  return res.redirect('https://your-frontend-domain.vercel.app');
 });
 
 app.listen(PORT, () => {
