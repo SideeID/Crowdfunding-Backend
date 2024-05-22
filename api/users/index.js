@@ -385,7 +385,7 @@ app.get('/login/success', async (req, res) => {
 
 // endpoint logout
 app.get('/logout', (req, res, next) => {
-  req.session.destroy();
+  // req.session.destroy();
   req.logout((err) => {
     if (err) return next(err);
     return res.redirect('https://your-frontend-domain.vercel.app');
