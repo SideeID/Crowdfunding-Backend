@@ -23,12 +23,12 @@ app.use(
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
-  }),
+  })
 );
 app.use(express.json());
 
 app.use(
-  session({ secret: 'secret234563', resave: false, saveUninitialized: true }),
+  session({ secret: 'secret234563', resave: false, saveUninitialized: true })
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -58,8 +58,8 @@ passport.use(
       } catch (error) {
         return done(error, null);
       }
-    },
-  ),
+    }
+  )
 );
 
 passport.serializeUser((user, done) => done(null, user.id));
@@ -242,11 +242,12 @@ app.post('/login', async (req, res) => {
     delete req.session.loginAttempts;
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
 
-    return res
-      .status(200)
-      .json({
-        success: true, message: 'Login berhasil', token, user,
-      });
+    return res.status(200).json({
+      success: true,
+      message: 'Login berhasil',
+      token,
+      user,
+    });
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -258,14 +259,14 @@ app.post('/login', async (req, res) => {
 
 app.get(
   '/auth/google',
-  passport.authenticate('google', { scope: ['email', 'profile'] }),
+  passport.authenticate('google', { scope: ['email', 'profile'] })
 );
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', {
     successRedirect: 'https://your-frontend-domain.vercel.app/dashboard',
     failureRedirect: 'https://your-frontend-domain.vercel.app/login',
-  }),
+  })
 );
 
 app.get('/login/success', async (req, res) => {
