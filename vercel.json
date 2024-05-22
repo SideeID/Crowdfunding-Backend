@@ -8,24 +8,16 @@
   ],
   "routes": [
     {
-      "src": "/auth/(.*)",
-      "dest": "./index.js"
+      "src": "/.*",
+      "dest": "index.js"
     },
     {
-      "src": "/users/(.*)",
-      "dest": "./index.js"
+      "src": "/users/.*",
+      "dest": "./src/routes/users.js"
     },
     {
-      "src": "/auth/(.*)",
-      "dest": "./index.js"
-    },
-    {
-      "src": "/login/(.*)",
-      "dest": "./index.js"
-    },
-    {
-      "src": "/logout/(.*)",
-      "dest": "./index.js"
+      "src": "/auth/.*",
+      "dest": "./src/routes/auth.js"
     }
   ]
 }
