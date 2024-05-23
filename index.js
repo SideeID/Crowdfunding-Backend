@@ -43,6 +43,8 @@ app.get('/', (req, res) => {
       <li><strong>PUT /users/:id</strong>: Memperbarui informasi pengguna berdasarkan ID.</li>
       <li><strong>GET /users/:id</strong>: Mendapatkan detail pengguna berdasarkan ID.</li>
       <li><strong>GET /users/profile</strong>: Mendapatkan profile pengguna yang sedang login</li>
+      <li><strong>DELETE /users/:id</strong>: Menghapus pengguna berdasarkan ID.</li>
+      <li><strong>GET /users</strong>: Mendapatkan semua daftar pengguna.</li>
       <br>
       <li><strong>GET /fundraisers</strong>: Mendapatkan daftar penggalangan dana.</li>
       <li><strong>POST /fundraisers</strong>: Membuat penggalangan dana baru.</li>
@@ -88,6 +90,12 @@ app.get('/', (req, res) => {
 
       <h2>profile pengguna yang sedang login</h2>
       GET /users/profile
+
+      <h2>hapus pengguna</h2>
+      DELETE /users/:id
+
+      <h2>daftar semua pengguna</h2>
+      GET /users
 
       <h2>daftar penggalangan dana</h2>
       GET /fundraisers
