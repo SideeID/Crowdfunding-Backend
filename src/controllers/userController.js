@@ -196,10 +196,54 @@ const getOwnProfile = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  const userId = req.user._id;
+
+  try {
+    const user = await Userdb.findByIdAndDelete(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User tidak ditemukan',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'User berhasil dihapus',
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Terjadi kesalahan pada server',
+      error: error.message,
+    });
+  }
+};
+
+const getAllUser = async (req, res) => {
+  try {
+    const users = await Userdb.find();
+    return res.status(200).json({
+      success: true,
+      message: 'Semua user berhasil ditemukan',
+      users,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Terjadi kesalahan pada server',
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getUserById,
   updateUser,
   getOwnProfile,
+  deleteUser,
+  getAllUser,
 };
