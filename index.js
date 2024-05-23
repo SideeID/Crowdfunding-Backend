@@ -47,6 +47,8 @@ app.get('/', (req, res) => {
       <li><strong>GET /fundraisers</strong>: Mendapatkan daftar penggalangan dana.</li>
       <li><strong>POST /fundraisers</strong>: Membuat penggalangan dana baru.</li>
       <li><strong>GET /fundraisers/:id</strong>: Mendapatkan detail penggalangan dana berdasarkan ID.</li>
+      <li><strong>PUT /fundraisers/:id</strong>: Memperbarui informasi penggalangan dana berdasarkan ID.</li>
+      <li><strong>DELETE /fundraisers/:id</strong>: Menghapus penggalangan dana berdasarkan ID.</li>
       <br>
       <li><strong>GET /auth/google</strong>: Memulai proses autentikasi menggunakan Google OAuth2.</li>
       <li><strong>GET /auth/google/callback</strong>: Callback URL setelah autentikasi Google berhasil atau gagal.</li>
@@ -58,7 +60,7 @@ app.get('/', (req, res) => {
     <p>Contoh penggunaan API Penggalangan Dana:</p>
     <pre>
       <code>
-      // Mendaftarkan pengguna baru
+      <h2>registrasi pengguna</h2>
       POST /users/register
       {
         "displayName": "John Doe",
@@ -66,14 +68,14 @@ app.get('/', (req, res) => {
         "password": "password"
       }
 
-      // Login pengguna
+      <h2>login pengguna</h2>
       POST /users/login
       {
         "email": "email@example.com",
         "password": "password"
       }
 
-      // Memperbarui informasi pengguna
+      <h2>update pengguna</h2>
       PUT /users/:id
       {
         "displayName": "John Doe",
@@ -81,19 +83,19 @@ app.get('/', (req, res) => {
         "password": "password"
       }
 
-      // Mendapatkan detail pengguna
+      <h2>detail pengguna by ID</h2>
       GET /users/:id
 
-      // Mendapatkan profile pengguna yang sedang login
+      <h2>profile pengguna yang sedang login</h2>
       GET /users/profile
 
-      // Mendapatkan daftar penggalangan dana
+      <h2>daftar penggalangan dana</h2>
       GET /fundraisers
 
-      // Mendapatkan detail penggalangan dana
+      <h2>detail penggalangan dana by ID</h2>
       GET /fundraisers/:id
 
-      // Membuat penggalangan dana baru
+      <h2>buat penggalangan dana</h2>
       POST /fundraisers
       {
         "title": "Your fundraiser title",
@@ -103,6 +105,20 @@ app.get('/', (req, res) => {
         "isClosed": false,
         "endDate": "2024-12-31T23:59:59.000Z"
       }
+
+      <h2>update penggalangan dana</h2>
+      PUT /fundraisers/:id
+      {
+        "title": "Your fundraiser title",
+        "description": "Describe your fundraiser in detail",
+        "goal": 1000000,
+        "image": "https://i.pinimg.com/564x/3c/a3/f0/3ca3f02e1ec3a6d2d30a6558b97add06.jpg",
+        "isClosed": false,
+        "endDate": "2024-12-31T23:59:59.000Z"
+      }
+
+      <h2>hapus penggalangan dana</h2>
+      DELETE /fundraisers/:id
       </code>
     </pre>
   `);
