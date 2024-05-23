@@ -24,6 +24,8 @@ The backend is deployed on Vercel and can be accessed at [https://crowdfunding-b
 - `PUT /users/:id`: Memperbarui informasi pengguna berdasarkan ID (Middleware).
 - `GET /users/:id`: Mendapatkan detail pengguna berdasarkan ID.
 - `GET /users/profile`: Mendapatkan profile pengguna yang sedang login.
+- `DELETE /users/:id`: Menghapus data user (Middleware).
+- `GET /users`: Mendapatkan semua record user. 
 - `GET /auth/google`: Memulai autentikasi Google OAuth2.
 - `GET /auth/google/callback`: URL callback setelah autentikasi Google.
 - `GET /auth/login/success`: Memeriksa status autentikasi pengguna.
