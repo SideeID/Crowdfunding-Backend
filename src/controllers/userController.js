@@ -6,7 +6,9 @@ const { JWT_SECRET } = process.env;
 const MAX_LOGIN_ATTEMPTS = 5;
 
 const registerUser = async (req, res) => {
-  const { displayName, email, password } = req.body;
+  const {
+    displayName, email, password, role,
+  } = req.body;
   if (!displayName || !email || !password) {
     return res.status(400).json({
       success: false,
@@ -28,6 +30,7 @@ const registerUser = async (req, res) => {
       displayName,
       email,
       password: hashedPassword,
+      role: role || 'user',
     });
     await user.save();
 
