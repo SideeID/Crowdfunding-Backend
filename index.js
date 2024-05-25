@@ -11,6 +11,7 @@ require('./src/auth/passport');
 const userRoutes = require('./src/routes/users');
 const authRoutes = require('./src/routes/auth');
 const fundraiserRoutes = require('./src/routes/fundraiser');
+const donationRoutes = require('./src/routes/donation');
 
 const app = express();
 const PORT = process.env.PORT || 6005;
@@ -22,6 +23,7 @@ app.use(
     credentials: true,
   }),
 );
+// middleware untuk membaca body dari request
 app.use(express.json());
 
 app.use(
@@ -56,6 +58,9 @@ app.get('/', (req, res) => {
       <li><strong>GET /auth/google/callback</strong>: Callback URL setelah autentikasi Google berhasil atau gagal.</li>
       <li><strong>GET /auth/login/success</strong>: Mengecek status autentikasi pengguna dan mengembalikan informasi pengguna yang telah diautentikasi.</li>
       <li><strong>GET /auth/logout</strong>: Mengeluarkan pengguna dari sesi dan mengarahkan ke halaman utama.</li>
+      <br>
+      <li><strong>POST /donations</strong>: Membuat donasi baru.</li>
+      <li><strong>POST /donations/notification</strong>: Menerima notifikasi dari Midtrans setelah transaksi donasi berhasil.</li>
     </ul>
 
     <h2>Contoh Penggunaan</h2>
@@ -135,6 +140,7 @@ app.get('/', (req, res) => {
 app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
 app.use('/fundraisers', fundraiserRoutes);
+app.use('/donations', donationRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
