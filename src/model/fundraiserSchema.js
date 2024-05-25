@@ -1,4 +1,25 @@
+/* eslint-disable func-names */
 const mongoose = require('mongoose');
+
+const donationSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  amount: {
+    type: Number,
+    required: true,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+  isAnonymous: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 const fundraiserSchema = new mongoose.Schema(
   {
@@ -14,6 +35,10 @@ const fundraiserSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    collectedAmount: {
+      type: Number,
+      default: 0,
+    },
     image: {
       type: String,
       required: true,
@@ -28,13 +53,22 @@ const fundraiserSchema = new mongoose.Schema(
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'users',
+      ref: 'User',
     },
+    donations: [donationSchema],
   },
   { timestamps: true },
 );
 
-// eslint-disable-next-line func-names
+// Middleware to update collectedAmount
+fundraiserSchema.pre('save', function (next) {
+  this.collectedAmount = this.donations.reduce(
+    (total, donation) => total + donation.amount,
+    0,
+  );
+  next();
+});
+
 fundraiserSchema.virtual('remainingDays').get(function () {
   const now = new Date();
   const end = new Date(this.endDate);
