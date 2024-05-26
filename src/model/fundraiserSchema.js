@@ -19,6 +19,10 @@ const donationSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  orderId: {
+    type: String,
+    required: true,
+  },
 });
 
 const fundraiserSchema = new mongoose.Schema(
