@@ -41,6 +41,15 @@ const createDonation = async (req, res) => {
       .substring(2, 15)}`;
     const redirectUrl = await createTransaction(orderId, amount, user);
 
+    fundraiser.donations.push({
+      user: user._id,
+      amount,
+      isAnonymous,
+      orderId,
+    });
+
+    await fundraiser.save();
+
     return res.status(201).json({
       success: true,
       message: 'Transaksi donasi berhasil dibuat',
