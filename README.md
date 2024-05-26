@@ -46,6 +46,7 @@ The backend is deployed on Vercel and can be accessed at [https://crowdfunding-b
 - OAuth2
 - Bcrypt.js
 - JSON Web Tokens (JWT)
+- Midtrans
 
 ## Usage
 
