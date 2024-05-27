@@ -130,7 +130,7 @@ const getUserById = async (req, res) => {
 const updateUser = async (req, res) => {
   const userId = req.user._id;
   const {
-    displayName, email, password, image,
+    displayName, email, password, image, role,
   } = req.body;
 
   try {
@@ -142,7 +142,7 @@ const updateUser = async (req, res) => {
       });
     }
 
-    if (!displayName && !email && !password && !image) {
+    if (!displayName && !email && !password && !image && !role) {
       return res.status(400).json({
         success: false,
         message: 'Harap isi setidaknya satu bidang',
@@ -156,6 +156,7 @@ const updateUser = async (req, res) => {
       user.password = hashedPassword;
     }
     if (image) user.image = image;
+    if (role) user.role = role;
 
     await user.save();
 
