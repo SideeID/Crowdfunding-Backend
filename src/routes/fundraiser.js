@@ -20,7 +20,7 @@ router.delete('/:id', authMiddleware, roleMiddleware('admin'), deleteFundraiser)
 
 // Rute untuk melayani halaman fundraiser.html
 router.get('/details/:id', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/fundraiser.html'));
+  res.sendFile(path.join(__dirname, '../../public/fundraiser.html'));
 });
 
 module.exports = router;

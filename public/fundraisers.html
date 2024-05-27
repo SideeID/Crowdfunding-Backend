@@ -4,23 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fundraisers</title>
-  <script>
-    async function fetchFundraisers() {
-      const response = await fetch('/fundraisers');
-      const fundraisers = await response.json();
-      const fundraiserList = document.getElementById('fundraiser-list');
-      fundraisers.forEach(fundraiser => {
-        const li = document.createElement('li');
-        li.innerHTML = `<a href="/fundraiser/${fundraiser._id}">${fundraiser.title}</a>`;
-        fundraiserList.appendChild(li);
-      });
-    }
-
-    document.addEventListener('DOMContentLoaded', fetchFundraisers);
-  </script>
 </head>
 <body>
   <h1>Fundraisers</h1>
   <ul id="fundraiser-list"></ul>
+
+  <script>
+    async function fetchFundraisers() {
+      try {
+        const response = await fetch('/fundraisers');
+        const data = await response.json();
+
+        if (data.success) {
+          const fundraisers = data.fundraisers;
+          const fundraiserList = document.getElementById('fundraiser-list');
+
+          fundraisers.forEach(fundraiser => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+              <div>
+                <img src="${fundraiser.image}" alt="${fundraiser.title}" width="100">
+                <h2>${fundraiser.title}</h2>
+                <p>Description: ${fundraiser.description}</p>
+                <p>Goal: ${fundraiser.goal}</p>
+                <p>Collected Amount: ${fundraiser.collectedAmount}</p>
+                <p>End Date: ${fundraiser.endDate}</p>
+                <a href="/fundraisers/details/${fundraiser._id}">Details</a>
+              </div>
+            `;
+            fundraiserList.appendChild(li);
+          });
+        } else {
+          console.error('Error fetching fundraisers:', data.error);
+        }
+      } catch (error) {
+        console.error('Error fetching fundraisers:', error);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchFundraisers);
+  </script>
 </body>
 </html>
