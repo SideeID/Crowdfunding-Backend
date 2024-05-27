@@ -7,6 +7,7 @@ const session = require('express-session');
 const passport = require('passport');
 require('./src/db/mongo');
 require('./src/auth/passport');
+const path = require('path');
 
 const userRoutes = require('./src/routes/users');
 const authRoutes = require('./src/routes/auth');
@@ -25,7 +26,7 @@ app.use(
 );
 // middleware untuk membaca body dari request
 app.use(express.json());
-
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   session({ secret: 'secret234563', resave: false, saveUninitialized: true }),
 );

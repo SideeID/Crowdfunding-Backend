@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fundraiser Details</title>
+  <script>
+    async function fetchFundraiserDetails() {
+      const fundraiserId = window.location.pathname.split('/').pop();
+      const response = await fetch(`/fundraisers/${fundraiserId}`);
+      const fundraiser = await response.json();
+      
+      document.getElementById('title').innerText = fundraiser.title;
+      document.getElementById('description').innerText = fundraiser.description;
+      document.getElementById('goal').innerText = `Goal: ${fundraiser.goal}`;
+      document.getElementById('collectedAmount').innerText = `Collected: ${fundraiser.collectedAmount}`;
+      const progressBar = document.getElementById('progress-bar');
+      progressBar.max = fundraiser.goal;
+      progressBar.value = fundraiser.collectedAmount;
+    }
+
+    async function handleDonation(event) {
+      event.preventDefault();
+      const fundraiserId = window.location.pathname.split('/').pop();
+      const amount = document.getElementById('amount').value;
+      const isAnonymous = document.getElementById('isAnonymous').checked;
+
+      const response = await fetch('/donations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          fundraiserId,
+          amount,
+          isAnonymous
+        })
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        window.location.href = data.redirect_url;
+      } else {
+        alert('Failed to create donation');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchFundraiserDetails);
+  </script>
+</head>
+<body>
+  <h1 id="title">Fundraiser Title</h1>
+  <p id="description">Fundraiser Description</p>
+  <p id="goal">Goal: 0</p>
+  <p id="collectedAmount">Collected: 0</p>
+  <progress id="progress-bar" value="0" max="100"></progress>
+
+  <form id="donation-form" onsubmit="handleDonation(event)">
+    <label for="amount">Donation Amount:</label>
+    <input type="number" id="amount" name="amount" required>
+    <br>
+    <label for="isAnonymous">Donate Anonymously:</label>
+    <input type="checkbox" id="isAnonymous" name="isAnonymous">
+    <br>
+    <button type="submit">Donate</button>
+  </form>
+</body>
+</html>
