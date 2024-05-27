@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fundraisers</title>
+  <script>
+    async function fetchFundraisers() {
+      const response = await fetch('/fundraisers');
+      const fundraisers = await response.json();
+      const fundraiserList = document.getElementById('fundraiser-list');
+      fundraisers.forEach(fundraiser => {
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="/fundraiser/${fundraiser._id}">${fundraiser.title}</a>`;
+        fundraiserList.appendChild(li);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchFundraisers);
+  </script>
+</head>
+<body>
+  <h1>Fundraisers</h1>
+  <ul id="fundraiser-list"></ul>
+</body>
+</html>
