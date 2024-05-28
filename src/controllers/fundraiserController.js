@@ -59,6 +59,7 @@ const getFundraiserById = async (req, res) => {
   try {
     const fundraiser = await Fundraiser.findById(id)
       .populate('userId', 'displayName')
+      .populate('donations.user', 'displayName')
       .exec();
     if (!fundraiser) {
       return res
@@ -66,7 +67,19 @@ const getFundraiserById = async (req, res) => {
         .json({ success: false, message: 'Penggalangan dana tidak ditemukan' });
     }
 
-    return res.status(200).json({ success: true, fundraiser });
+    const now = new Date();
+    const endDate = new Date(fundraiser.endDate);
+    const remainingDays = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
+
+    const fundraiserWithRemainingDays = {
+      ...fundraiser.toObject(),
+      remainingDays: remainingDays > 0 ? remainingDays : 0,
+    };
+
+    return res.status(200).json({
+      success: true,
+      fundraiser: fundraiserWithRemainingDays,
+    });
   } catch (error) {
     return res.status(500).json({
       success: false,
