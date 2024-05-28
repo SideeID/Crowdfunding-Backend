@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Status</title>
+  <script>
+    function getQueryParams() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        order_id: params.get('order_id'),
+        status_code: params.get('status_code'),
+        transaction_status: params.get('transaction_status')
+      };
+    }
+
+    async function notifyBackend(orderId, statusCode, transactionStatus) {
+      try {
+        const response = await fetch('/payment-notification', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({ order_id: orderId, status_code: statusCode, transaction_status: transactionStatus })
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          // Handle successful response
+          console.log('Payment status updated successfully', data);
+        } else {
+          // Handle errors
+          console.error('Failed to update payment status', data);
+        }
+      } catch (error) {
+        console.error('Error notifying backend:', error);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const { order_id, status_code, transaction_status } = getQueryParams();
+      if (order_id && status_code && transaction_status) {
+        notifyBackend(order_id, status_code, transaction_status);
+      }
+    });
+  </script>
+</head>
+<body>
+  <h1>Processing Payment...</h1>
+</body>
+</html>
