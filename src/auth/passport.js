@@ -29,7 +29,7 @@ passport.use(
           await user.save();
         }
         const token = jwt.sign({ id: user._id }, JWT_SECRET, {
-          expiresIn: '1h',
+          expiresIn: '3h',
         });
         return done(null, { user, token });
       } catch (error) {
