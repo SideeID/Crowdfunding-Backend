@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const Fundraiser = require('../model/fundraiserSchema');
 
-router.post('/payment-notification', async (req, res) => {
+router.post('/donation', async (req, res) => {
   const { order_id, status_code, transaction_status } = req.body;
 
   try {
