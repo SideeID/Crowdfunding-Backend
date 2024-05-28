@@ -16,7 +16,7 @@ const loginSuccess = (req, res) => {
 const logout = (req, res, next) => {
   req.logout((err) => {
     if (err) return next(err);
-    return res.redirect('https://your-frontend-domain.vercel.app');
+    return res.redirect('http://localhost:5173');
   });
 };
 
