@@ -63,6 +63,8 @@ app.get('/', (req, res) => {
       <br>
       <li><strong>POST /donations</strong>: Membuat donasi baru.</li>
       <li><strong>POST /donations/notification</strong>: Menerima notifikasi dari Midtrans setelah transaksi donasi berhasil.</li>
+      <br>
+      <li><strong>POST /payment-notification/donation</strong>: Menerima notifikasi dari Midtrans setelah transaksi donasi berhasil dan mengirimkan notifikasi ke penggalangan dana.</li>
     </ul>
 
     <h2>Contoh Penggunaan</h2>
@@ -143,6 +145,7 @@ app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
 app.use('/fundraisers', fundraiserRoutes);
 app.use('/donations', donationRoutes);
+// endpoint untuk notifikasi pembayaran
 app.use('/payment-notification', paymentRoutes);
 
 app.listen(PORT, () => {
