@@ -16,7 +16,7 @@ router.get(
   }),
   (req, res) => {
     const { token } = req.user;
-    res.redirect(`http://localhost:5173/dashboard?token=${token}`);
+    res.redirect(`http://localhost:5173/?token=${token}`);
   },
 );
 
