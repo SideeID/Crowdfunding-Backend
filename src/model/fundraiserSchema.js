@@ -23,6 +23,11 @@ const donationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  status: {
+    type: String,
+    enum: ['pending', 'completed'],
+    default: 'pending',
+  },
 });
 
 const fundraiserSchema = new mongoose.Schema(
@@ -66,10 +71,9 @@ const fundraiserSchema = new mongoose.Schema(
 
 // Middleware to update collectedAmount
 fundraiserSchema.pre('save', function (next) {
-  this.collectedAmount = this.donations.reduce(
-    (total, donation) => total + donation.amount,
-    0,
-  );
+  this.collectedAmount = this.donations
+    .filter((donation) => donation.status === 'completed')
+    .reduce((total, donation) => total + donation.amount, 0);
   next();
 });
 
