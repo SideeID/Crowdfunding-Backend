@@ -28,8 +28,9 @@
                 <p>Description: ${fundraiser.description}</p>
                 <p>Goal: ${fundraiser.goal}</p>
                 <p>Collected Amount: ${fundraiser.collectedAmount}</p>
-                <p>End Date: ${fundraiser.endDate}</p>
-                <a href="/fundraisers/details/${fundraiser._id}">Details</a>
+                <p>End Date: ${new Date(fundraiser.endDate).toLocaleDateString()}</p>
+                <a href="/fundraisers/details/${fundraiser._id}">View Details</a>
+                <hr>
               </div>
             `;
             fundraiserList.appendChild(li);
