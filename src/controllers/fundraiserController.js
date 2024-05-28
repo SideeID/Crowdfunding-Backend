@@ -89,7 +89,6 @@ const getFundraiserById = async (req, res) => {
   }
 };
 
-// edit fundraiser
 const updateFundraiser = async (req, res) => {
   const { id } = req.params;
   const {

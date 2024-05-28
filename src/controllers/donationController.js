@@ -41,7 +41,6 @@ const createDonation = async (req, res) => {
       .substring(2, 15)}`;
     const redirectUrl = await createTransaction(orderId, amount, user);
 
-    // donasi dibuat pending
     fundraiser.donations.push({
       user: user._id,
       amount,

@@ -69,7 +69,6 @@ const fundraiserSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-// Middleware to update collectedAmount
 fundraiserSchema.pre('save', function (next) {
   this.collectedAmount = this.donations
     .filter((donation) => donation.status === 'completed')
@@ -77,7 +76,6 @@ fundraiserSchema.pre('save', function (next) {
   next();
 });
 
-// Virtual field to calculate remainingDays
 fundraiserSchema.virtual('remainingDays').get(function () {
   const now = new Date();
   const end = new Date(this.endDate);
