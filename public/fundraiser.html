@@ -15,9 +15,20 @@
       document.getElementById('description').innerText = fundraiser.description;
       document.getElementById('goal').innerText = `Goal: ${fundraiser.goal}`;
       document.getElementById('collectedAmount').innerText = `Collected: ${fundraiser.collectedAmount}`;
+      document.getElementById('remainingDays').innerText = `Remaining Days: ${fundraiser.remainingDays}`;
+
       const progressBar = document.getElementById('progress-bar');
       progressBar.max = fundraiser.goal;
       progressBar.value = fundraiser.collectedAmount;
+
+      const donorsList = document.getElementById('donors');
+      donorsList.innerHTML = '';
+      fundraiser.donations.forEach(donation => {
+        const listItem = document.createElement('li');
+        listItem.textContent = donation.isAnonymous ? 'Anonymous' : donation.user.displayName;
+        listItem.textContent += ` - ${donation.amount}`;
+        donorsList.appendChild(listItem);
+      });
     }
 
     async function handleDonation(event) {
@@ -43,7 +54,7 @@
       if (response.ok) {
         window.location.href = data.data.redirectUrl;
       } else {
-        alert('Failed to create donation');
+        alert('Failed to create donation: ' + data.message);
       }
     }
 
@@ -55,7 +66,10 @@
   <p id="description">Fundraiser Description</p>
   <p id="goal">Goal: 0</p>
   <p id="collectedAmount">Collected: 0</p>
+  <p id="remainingDays">Remaining Days: 0</p>
   <progress id="progress-bar" value="0" max="100"></progress>
+  <h2>Donors</h2>
+  <ul id="donors"></ul>
 
   <form id="donation-form" onsubmit="handleDonation(event)">
     <label for="amount">Donation Amount:</label>
