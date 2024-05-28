@@ -143,7 +143,7 @@ app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
 app.use('/fundraisers', fundraiserRoutes);
 app.use('/donations', donationRoutes);
-app.use('/payment', paymentRoutes);
+app.use('/payment-notification', paymentRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
