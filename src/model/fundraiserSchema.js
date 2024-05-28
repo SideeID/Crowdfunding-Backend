@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const donationSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'users',
     required: true,
   },
   amount: {
@@ -62,7 +62,7 @@ const fundraiserSchema = new mongoose.Schema(
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'users',
     },
     donations: [donationSchema],
   },
@@ -77,6 +77,7 @@ fundraiserSchema.pre('save', function (next) {
   next();
 });
 
+// Virtual field to calculate remainingDays
 fundraiserSchema.virtual('remainingDays').get(function () {
   const now = new Date();
   const end = new Date(this.endDate);
