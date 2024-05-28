@@ -22,6 +22,10 @@
     {
       "src": "/fundraisers/.*",
       "dest": "./src/routes/fundraiser.js"
+    },
+    {
+      "src": "/payment-notification/.*",
+      "dest": "./src/routes/payment.js"
     }
   ]
 }
