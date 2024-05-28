@@ -9,13 +9,12 @@
       const fundraiserId = window.location.pathname.split('/').pop();
       const response = await fetch(`/fundraisers/${fundraiserId}`);
       const data = await response.json();
-      const fundraiser = data.fundraiser; // Ubah dari fundraiser menjadi data.fundraiser
+      const fundraiser = data.fundraiser;
 
       document.getElementById('title').innerText = fundraiser.title;
       document.getElementById('description').innerText = fundraiser.description;
       document.getElementById('goal').innerText = `Goal: ${fundraiser.goal}`;
       document.getElementById('collectedAmount').innerText = `Collected: ${fundraiser.collectedAmount}`;
-      
       const progressBar = document.getElementById('progress-bar');
       progressBar.max = fundraiser.goal;
       progressBar.value = fundraiser.collectedAmount;
@@ -42,7 +41,7 @@
 
       const data = await response.json();
       if (response.ok) {
-        window.location.href = data.redirect_url;
+        window.location.href = data.data.redirectUrl;
       } else {
         alert('Failed to create donation');
       }
