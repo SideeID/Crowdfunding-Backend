@@ -41,11 +41,13 @@ const createDonation = async (req, res) => {
       .substring(2, 15)}`;
     const redirectUrl = await createTransaction(orderId, amount, user);
 
+    // donasi dibuat pending
     fundraiser.donations.push({
       user: user._id,
       amount,
       isAnonymous,
       orderId,
+      status: 'pending',
     });
 
     await fundraiser.save();
@@ -102,6 +104,7 @@ const handleNotification = async (req, res) => {
         message: 'Notifikasi berhasil diproses',
       });
     }
+
     return res.status(400).json({
       success: false,
       message: 'Status transaksi tidak valid',
