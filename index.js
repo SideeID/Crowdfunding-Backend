@@ -13,6 +13,7 @@ const userRoutes = require('./src/routes/users');
 const authRoutes = require('./src/routes/auth');
 const fundraiserRoutes = require('./src/routes/fundraiser');
 const donationRoutes = require('./src/routes/donation');
+const paymentRoutes = require('./src/routes/payment');
 
 const app = express();
 const PORT = process.env.PORT || 6005;
@@ -142,6 +143,7 @@ app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
 app.use('/fundraisers', fundraiserRoutes);
 app.use('/donations', donationRoutes);
+app.use('/payment', paymentRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
