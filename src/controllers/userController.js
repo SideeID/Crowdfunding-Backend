@@ -75,7 +75,8 @@ const loginUser = async (req, res) => {
         return res.status(401).json({
           success: false,
           attempts: req.session.loginAttempts,
-          message: 'Masukin passwordnya bener dong! Gitu aja ga bisa, lihat tu tetangga sebelah udah pada nikah semua, lu masih aja ga bisa login, yang bener aja!',
+          message:
+            'Masukin passwordnya bener dong! Gitu aja ga bisa, lihat tu tetangga sebelah udah pada nikah semua, lu masih aja ga bisa login, yang bener aja!',
         });
       }
       return res
@@ -86,11 +87,22 @@ const loginUser = async (req, res) => {
     delete req.session.loginAttempts;
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '3h' });
 
+    // login admin
+    if (user.role === 'admin') {
+      return res.status(200).json({
+        success: true,
+        message: 'Berhasil login sebagai admin',
+        token,
+        user,
+        redirectUrl: 'admin/dashboard',
+      });
+    }
     return res.status(200).json({
       success: true,
-      message: 'Login berhasil',
+      message: 'Berhasil login sebagai user',
       token,
       user,
+      redirectUrl: '/',
     });
   } catch (error) {
     return res.status(500).json({
