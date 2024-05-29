@@ -8,9 +8,10 @@ const loginSuccess = (req, res) => {
       role: req.user.role,
     });
   }
-  return res
-    .status(401)
-    .json({ success: false, message: 'User belum melakukan autentikasi' });
+  return res.status(401).json({
+    success: false,
+    message: 'Waduh User belum melakukan autentikasi',
+  });
 };
 
 const logout = (req, res, next) => {
