@@ -10,15 +10,23 @@ const {
 } = require('../controllers/userController');
 
 const authMiddleware = require('../middleware/authMiddleware');
+const roleMiddleware = require('../middleware/roleMiddleware');
 
 const router = express.Router();
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);
+
 router.get('/profile', authMiddleware, getOwnProfile);
-router.get('/:id', getUserById);
 router.put('/:id', authMiddleware, updateUser);
 router.delete('/:id', authMiddleware, deleteUser);
+
 router.get('/', getAllUser);
+router.get('/:id', getUserById);
+
+router.get('/admin/dashboard', authMiddleware, roleMiddleware('admin'), (req, res) => res.status(200).json({
+  success: true,
+  message: 'Admin dashboard',
+}));
 
 module.exports = router;
