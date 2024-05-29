@@ -18,7 +18,7 @@ const createDonation = async (req, res) => {
     if (!fundraiser) {
       return res.status(404).json({
         success: false,
-        message: 'Fundraiser tidak ditemukan',
+        message: 'Waduh Fundraiser tidak ditemukan',
       });
     }
 
@@ -82,7 +82,7 @@ const handleNotification = async (req, res) => {
       if (!fundraiser) {
         return res.status(404).json({
           success: false,
-          message: 'Fundraiser tidak ditemukan',
+          message: 'Waduh Fundraiser tidak ditemukan',
         });
       }
 
@@ -90,7 +90,7 @@ const handleNotification = async (req, res) => {
       if (!donation) {
         return res.status(404).json({
           success: false,
-          message: 'Donasi tidak ditemukan',
+          message: 'Waduh Donasi tidak ditemukan',
         });
       }
 
