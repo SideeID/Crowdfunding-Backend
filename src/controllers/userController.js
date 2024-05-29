@@ -21,7 +21,7 @@ const registerUser = async (req, res) => {
     if (user) {
       return res.status(400).json({
         success: false,
-        message: 'Email sudah terdaftar',
+        message: 'Waduh Email sudah terdaftar',
       });
     }
 
@@ -81,13 +81,12 @@ const loginUser = async (req, res) => {
       }
       return res
         .status(400)
-        .json({ success: false, message: 'Password salah' });
+        .json({ success: false, message: 'Passwordnya salah' });
     }
 
     delete req.session.loginAttempts;
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '3h' });
 
-    // login admin
     if (user.role === 'admin') {
       return res.status(200).json({
         success: true,
@@ -121,13 +120,13 @@ const getUserById = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'User tidak ditemukan',
+        message: 'Waduh User tidak ditemukan',
       });
     }
 
     return res.status(200).json({
       success: true,
-      message: 'User berhasil ditemukan',
+      message: 'Waduh User berhasil ditemukan',
       user,
     });
   } catch (error) {
@@ -150,14 +149,14 @@ const updateUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'User tidak ditemukan',
+        message: 'Waduh User tidak ditemukan',
       });
     }
 
     if (!displayName && !email && !password && !image && !role) {
       return res.status(400).json({
         success: false,
-        message: 'Harap isi setidaknya satu bidang',
+        message: 'Harap isi setidaknya satu bidang coy!',
       });
     }
 
@@ -194,7 +193,7 @@ const getOwnProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'User tidak ditemukan',
+        message: 'Waduh User tidak ditemukan',
       });
     }
 
@@ -220,7 +219,7 @@ const deleteUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'User tidak ditemukan',
+        message: 'Waduh User tidak ditemukan',
       });
     }
 
