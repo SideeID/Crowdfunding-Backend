@@ -9,7 +9,7 @@ const createFundraiser = async (req, res) => {
   if (!title || !description || !image || isClosed || !endDate || !goal) {
     return res
       .status(400)
-      .json({ success: false, message: 'Harap isi semua bidang!' });
+      .json({ success: false, message: 'Harap isi semua bidang coy!' });
   }
 
   try {
@@ -62,9 +62,10 @@ const getFundraiserById = async (req, res) => {
       .populate('donations.user', 'displayName')
       .exec();
     if (!fundraiser) {
-      return res
-        .status(404)
-        .json({ success: false, message: 'Penggalangan dana tidak ditemukan' });
+      return res.status(404).json({
+        success: false,
+        message: 'Waduh Penggalangan dana tidak ditemukan',
+      });
     }
 
     const now = new Date();
@@ -98,7 +99,7 @@ const updateFundraiser = async (req, res) => {
   if (!title && !description && !image && !isClosed && !endDate && !goal) {
     return res.status(400).json({
       success: false,
-      message: 'Harap isi setidaknya satu bidang',
+      message: 'Harap isi setidaknya satu bidang coy!',
     });
   }
 
@@ -119,7 +120,7 @@ const updateFundraiser = async (req, res) => {
     if (!fundraiser) {
       return res.status(404).json({
         success: false,
-        message: 'Penggalangan dana tidak ditemukan',
+        message: 'Waduh Penggalangan dana tidak ditemukan',
       });
     }
 
@@ -145,7 +146,7 @@ const deleteFundraiser = async (req, res) => {
     if (!fundraiser) {
       return res.status(404).json({
         success: false,
-        message: 'Penggalangan dana tidak ditemukan',
+        message: 'Waduh Penggalangan dana tidak ditemukan',
       });
     }
 
