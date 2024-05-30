@@ -9,12 +9,10 @@ const authMiddleware = async (req, res, next) => {
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
-    return res
-      .status(401)
-      .json({
-        success: false,
-        message: 'Token tidak ditemukan, autentikasi ditolak',
-      });
+    return res.status(401).json({
+      success: false,
+      message: 'Waduh token tidak ditemukan, autentikasi ditolak',
+    });
   }
 
   try {
@@ -22,23 +20,19 @@ const authMiddleware = async (req, res, next) => {
     const user = await Userdb.findById(decoded.id);
 
     if (!user) {
-      return res
-        .status(401)
-        .json({
-          success: false,
-          message: 'Pengguna tidak ditemukan, autentikasi ditolak',
-        });
+      return res.status(401).json({
+        success: false,
+        message: 'Waduh pengguna tidak ditemukan, autentikasi ditolak',
+      });
     }
 
     req.user = user;
     next();
   } catch (error) {
-    return res
-      .status(401)
-      .json({
-        success: false,
-        message: 'Token tidak valid, autentikasi ditolak',
-      });
+    return res.status(401).json({
+      success: false,
+      message: 'Waduh token tidak valid, autentikasi ditolak',
+    });
   }
 };
 

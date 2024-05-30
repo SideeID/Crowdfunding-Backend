@@ -19,7 +19,7 @@ router.post('/donation', async (req, res) => {
       if (!fundraiser) {
         return res.status(404).json({
           success: false,
-          message: 'Fundraiser not found',
+          message: 'Fundraiser tidak ditemukan',
         });
       }
 
@@ -27,7 +27,7 @@ router.post('/donation', async (req, res) => {
       if (!donation) {
         return res.status(404).json({
           success: false,
-          message: 'Donation not found',
+          message: 'Donasi tidak ditemukan',
         });
       }
 
@@ -37,12 +37,12 @@ router.post('/donation', async (req, res) => {
 
       return res.status(200).json({
         success: true,
-        message: 'Payment notification processed successfully',
+        message: 'Notifikasi berhasil diproses',
       });
     }
     return res.status(400).json({
       success: false,
-      message: 'Invalid transaction status',
+      message: 'Status transaksi tidak valid',
     });
   } catch (error) {
     return res.status(500).json({
