@@ -14,6 +14,7 @@ const authRoutes = require('./src/routes/auth');
 const fundraiserRoutes = require('./src/routes/fundraiser');
 const donationRoutes = require('./src/routes/donation');
 const paymentRoutes = require('./src/routes/payment');
+const mitraRoutes = require('./src/routes/mitra');
 
 const app = express();
 const PORT = process.env.PORT || 6005;
@@ -65,6 +66,12 @@ app.get('/', (req, res) => {
       <li><strong>POST /donations/notification</strong>: Menerima notifikasi dari Midtrans setelah transaksi donasi berhasil.</li>
       <br>
       <li><strong>POST /payment-notification/donation</strong>: Menerima notifikasi dari Midtrans setelah transaksi donasi berhasil dan mengirimkan notifikasi ke penggalangan dana.</li>
+      <br>
+      <li><strong>POST /mitra</strong>: Membuat mitra baru.</li>
+      <li><strong>GET /mitra</strong>: Mendapatkan daftar mitra.</li>
+      <li><strong>GET /mitra/:id</strong>: Mendapatkan detail mitra berdasarkan ID.</li>
+      <li><strong>PUT /mitra/:id</strong>: Memperbarui informasi mitra berdasarkan ID.</li>
+      <li><strong>DELETE /mitra/:id</strong>: Menghapus mitra berdasarkan ID.</li>
     </ul>
 
     <h2>Contoh Penggunaan</h2>
@@ -145,8 +152,8 @@ app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
 app.use('/fundraisers', fundraiserRoutes);
 app.use('/donations', donationRoutes);
-// endpoint untuk notifikasi pembayaran
 app.use('/payment-notification', paymentRoutes);
+app.use('/mitra', mitraRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
