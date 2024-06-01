@@ -1,16 +1,12 @@
 const express = require('express');
 const passport = require('passport');
-const jwt = require('jsonwebtoken');
 const { loginSuccess, logout } = require('../controllers/authController');
 
-const { JWT_SECRET } = process.env;
 const router = express.Router();
 
 router.get(
   '/google',
-  passport.authenticate('google', {
-    scope: ['email', 'profile'],
-  }),
+  passport.authenticate('google', { scope: ['email', 'profile'] }),
 );
 
 router.get(
@@ -19,12 +15,8 @@ router.get(
     failureRedirect: 'http://localhost:5173/login',
   }),
   (req, res) => {
-    const token = jwt.sign(
-      { id: req.user._id, role: req.user.role },
-      JWT_SECRET,
-      { expiresIn: '3h' },
-    );
-    res.redirect(`http://localhost:5173/auth/google/callback?token=${token}`);
+    const { token } = req.user;
+    res.redirect(`http://localhost:5173/?token=${token}`);
   },
 );
 
