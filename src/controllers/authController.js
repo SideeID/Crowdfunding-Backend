@@ -1,11 +1,21 @@
-const loginSuccess = (req, res) => {
+const jwt = require('jsonwebtoken');
+const Userdb = require('../model/userSchema');
+
+const { JWT_SECRET } = process.env;
+
+const loginSuccess = async (req, res) => {
   if (req.user) {
+    const user = await Userdb.findById(req.user._id);
+    const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, {
+      expiresIn: '3h',
+    });
+
     return res.status(200).json({
       success: true,
       message: 'User berhasil diautentikasi',
-      user: req.user.user,
-      token: req.user.token,
-      role: req.user.role,
+      user,
+      token,
+      role: user.role,
     });
   }
   return res.status(401).json({
