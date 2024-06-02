@@ -249,12 +249,10 @@ const getAllUser = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: 'Berhasil mendapatkan semua pengguna',
-      data: {
-        users,
-        totalPages: Math.ceil(count / limit),
-        currentPage: page,
-      },
+      message: 'Semua user berhasil ditemukan',
+      users,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
     });
   } catch (error) {
     return res.status(500).json({
