@@ -237,7 +237,7 @@ const deleteUser = async (req, res) => {
 };
 
 const getAllUser = async (req, res) => {
-  const { page = 1, limit = 8 } = req.query;
+  const { page = 1, limit = 9 } = req.query;
 
   try {
     const users = await Userdb.find()
