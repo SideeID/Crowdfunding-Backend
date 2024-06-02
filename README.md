@@ -19,24 +19,25 @@ The backend is deployed on Vercel and can be accessed at [https://crowdfunding-b
 
 ## Endpoints
 
-- `POST /users/register`: Mendaftarkan pengguna baru.
-- `POST /users/login`: Login pengguna dengan email/kata sandi.
-- `PUT /users/:id`: Memperbarui informasi pengguna berdasarkan ID (Middleware).
-- `GET /users/:id`: Mendapatkan detail pengguna berdasarkan ID.
-- `GET /users/profile`: Mendapatkan profile pengguna yang sedang login.
-- `DELETE /users/:id`: Menghapus data user (Middleware).
-- `GET /users`: Mendapatkan semua record user. 
-- `GET /auth/google`: Memulai autentikasi Google OAuth2.
-- `GET /auth/google/callback`: URL callback setelah autentikasi Google.
-- `GET /auth/login/success`: Memeriksa status autentikasi pengguna.
-- `GET /auth/logout`: Logout pengguna.
-- `GET /fundraisers`: Mendapatkan semua data penggalangan.
-- `GET /fundraisers/:id`: Mendapatkan data penggalangan berdasarkan ID.
-- `POST /fundraisers`: Menambahkan data penggalangan dana (Middleware).
-- `PUT /fundraisers:id`: Memperbarui data penggalangan dana (Middleware).
-- `DELETE /fundraisers/:id`: Menghapus data penggalangan dana (Middleware).
-- `POST /donations`: 
-
+| Endpoint                  | HTTP Method | Description |
+| ------------------------- | ----------- | ----------- |
+| /users/register           | POST        | Mendaftarkan pengguna baru. |
+| /users/login              | POST        | Login pengguna dengan email/kata sandi. |
+| /users/:id                | PUT         | Memperbarui informasi pengguna berdasarkan ID (Middleware). |
+| /users/:id                | GET         | Mendapatkan detail pengguna berdasarkan ID. |
+| /users/profile            | GET         | Mendapatkan profile pengguna yang sedang login. |
+| /users/:id                | DELETE      | Menghapus data user (Middleware). |
+| /users                    | GET         | Mendapatkan semua record user. |
+| /auth/google              | GET         | Memulai autentikasi Google OAuth2. |
+| /auth/google/callback     | GET         | URL callback setelah autentikasi Google. |
+| /auth/login/success       | GET         | Memeriksa status autentikasi pengguna. |
+| /auth/logout              | GET         | Logout pengguna. |
+| /fundraisers              | GET         | Mendapatkan semua data penggalangan. |
+| /fundraisers/:id          | GET         | Mendapatkan data penggalangan berdasarkan ID. |
+| /fundraisers              | POST        | Menambahkan data penggalangan dana (Middleware). |
+| /fundraisers/:id          | PUT         | Memperbarui data penggalangan dana (Middleware). |
+| /fundraisers/:id          | DELETE      | Menghapus data penggalangan dana (Middleware). |
+| /donations                | POST        | Menambahkan data donasi. |
 
 ## Technologies Used
 
