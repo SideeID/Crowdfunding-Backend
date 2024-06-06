@@ -18,8 +18,8 @@ router.post('/register', registerUser);
 router.post('/login', loginUser);
 
 router.get('/profile', authMiddleware, getOwnProfile);
-router.put('/:id', authMiddleware, updateUser);
-router.delete('/:id', authMiddleware, deleteUser);
+router.put('/:id', updateUser);
+router.delete('/:id', deleteUser);
 
 router.get('/', getAllUser);
 router.get('/:id', getUserById);
