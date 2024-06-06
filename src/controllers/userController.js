@@ -139,7 +139,7 @@ const getUserById = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.params.id;
   const {
     displayName, email, password, image, role,
   } = req.body;
@@ -212,7 +212,7 @@ const getOwnProfile = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.params.id;
 
   try {
     const user = await Userdb.findByIdAndDelete(userId);
