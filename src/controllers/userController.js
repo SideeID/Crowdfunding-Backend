@@ -9,6 +9,9 @@ const registerUser = async (req, res) => {
   const {
     displayName, email, password, role,
   } = req.body;
+
+  console.log('Registering user:', req.body);
+
   if (!displayName || !email || !password) {
     return res.status(400).json({
       success: false,
@@ -40,6 +43,7 @@ const registerUser = async (req, res) => {
       user,
     });
   } catch (error) {
+    console.error('Error during registration:', error);
     return res.status(500).json({
       success: false,
       message: 'Terjadi kesalahan pada server',
