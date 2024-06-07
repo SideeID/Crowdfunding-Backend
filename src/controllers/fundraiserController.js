@@ -1,4 +1,5 @@
 const Fundraiser = require('../model/fundraiserSchema');
+const Mitra = require('../model/mitraSchema');
 
 const createFundraiser = async (req, res) => {
   const {
@@ -24,6 +25,10 @@ const createFundraiser = async (req, res) => {
     });
 
     await fundraiser.save();
+
+    await Mitra.findByIdAndUpdate(mitraId, {
+      $push: { fundraisers: fundraiser._id },
+    });
 
     return res.status(201).json({
       success: true,
@@ -118,6 +123,10 @@ const updateFundraiser = async (req, res) => {
       },
       { new: true },
     );
+
+    Mitra.findByIdAndUpdate(mitraId, {
+      $push: { fundraisers: fundraiser._id },
+    });
 
     if (!fundraiser) {
       return res.status(404).json({
