@@ -17,6 +17,10 @@ const mitraSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  fundraisers: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'fundraisers',
+  }],
 });
 
 const mitradb = mongoose.model('mitra', mitraSchema);
