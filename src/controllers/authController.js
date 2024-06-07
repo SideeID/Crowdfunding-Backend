@@ -3,9 +3,9 @@ const loginSuccess = (req, res) => {
     return res.status(200).json({
       success: true,
       message: 'User berhasil diautentikasi',
-      user: req.user.user,
-      token: req.user.token,
-      role: req.user.role,
+      user: req.user,
+      // token: req.user.token,
+      // role: req.user.role,
     });
   }
   return res.status(401).json({
