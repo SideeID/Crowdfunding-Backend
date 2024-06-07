@@ -64,6 +64,10 @@ const fundraiserSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'users',
     },
+    mitraId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'mitra',
+    },
     donations: [donationSchema],
   },
   { timestamps: true },
