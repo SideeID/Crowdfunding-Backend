@@ -4,9 +4,9 @@ const createFundraiser = async (req, res) => {
   const {
     title, description, image, isClosed, endDate, goal,
   } = req.body;
-  const userId = req.user._id;
+  const mitraId = req.user._id;
 
-  if (!title || !description || !image || isClosed || !endDate || !goal) {
+  if (!title || !description || !image || !endDate || !goal || !mitraId) {
     return res
       .status(400)
       .json({ success: false, message: 'Harap isi semua bidang coy!' });
@@ -20,8 +20,9 @@ const createFundraiser = async (req, res) => {
       image,
       isClosed,
       endDate,
-      createdBy: userId,
+      mitraId,
     });
+
     await fundraiser.save();
 
     return res.status(201).json({
@@ -93,10 +94,10 @@ const getFundraiserById = async (req, res) => {
 const updateFundraiser = async (req, res) => {
   const { id } = req.params;
   const {
-    title, description, image, isClosed, endDate, goal,
+    title, description, image, isClosed, endDate, goal, mitraId,
   } = req.body;
 
-  if (!title && !description && !image && !isClosed && !endDate && !goal) {
+  if (!title && !description && !image && !isClosed && !endDate && !goal && !mitraId) {
     return res.status(400).json({
       success: false,
       message: 'Harap isi setidaknya satu bidang coy!',
@@ -113,6 +114,7 @@ const updateFundraiser = async (req, res) => {
         isClosed,
         endDate,
         goal,
+        mitraId,
       },
       { new: true },
     );
