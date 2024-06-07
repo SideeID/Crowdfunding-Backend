@@ -27,7 +27,7 @@ const createFundraiser = async (req, res) => {
     await fundraiser.save();
 
     await Mitra.findByIdAndUpdate(mitraId, {
-      $push: { campaigns: fundraiser._id },
+      $push: { fundraisers: fundraiser._id },
     });
 
     return res.status(201).json({
@@ -124,8 +124,8 @@ const updateFundraiser = async (req, res) => {
       { new: true },
     );
 
-    await Mitra.findByIdAndUpdate(mitraId, {
-      $push: { campaigns: fundraiser._id },
+    Mitra.findByIdAndUpdate(mitraId, {
+      $push: { fundraisers: fundraiser._id },
     });
 
     if (!fundraiser) {
