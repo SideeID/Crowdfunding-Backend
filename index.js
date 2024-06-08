@@ -1,10 +1,9 @@
 require('dotenv').config();
 const express = require('express');
-// eslint-disable-next-line import/no-extraneous-dependencies
 const expressListRoutes = require('express-list-routes');
 const cors = require('cors');
-const session = require('express-session');
 const passport = require('passport');
+const session = require('express-session');
 require('./src/db/mongo');
 require('./src/auth/passport');
 const path = require('path');
@@ -24,19 +23,28 @@ app.use(
     origin: 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'],
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization', 'Access-Control-Allow-Credentials'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'Access-Control-Allow-Credentials',
+    ],
   }),
 );
-// middleware untuk membaca body dari request
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(
-  session({ secret: 'secret234563', resave: false, saveUninitialized: true }),
+  session({
+    secret: 'secret234563',
+    resave: false,
+    saveUninitialized: true,
+    // cookie: { secure: false },
+  }),
 );
 app.use(passport.initialize());
 app.use(passport.session());
 
-// endpoint dokumentasi API
 app.get('/', (req, res) => {
   res.send(`
     <h1>API PENGGALANGAN DANA</h1>
