@@ -29,6 +29,12 @@ const authMiddleware = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({
+        success: false,
+        message: 'Token sudah kedaluwarsa, silakan login kembali',
+      });
+    }
     return res.status(401).json({
       success: false,
       message: 'Waduh token tidak valid, autentikasi ditolak',
