@@ -29,6 +29,11 @@ app.use(
       'Content-Type',
       'Authorization',
       'Access-Control-Allow-Credentials',
+      'Access-Control-Allow-Origin',
+      'Access-Control-Allow-Headers',
+      'Origin',
+      'X-Requested-With',
+      'Accept',
     ],
   }),
 );
