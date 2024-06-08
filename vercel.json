@@ -26,6 +26,14 @@
     {
       "src": "/payment-notification/.*",
       "dest": "./src/routes/payment.js"
+    },
+    {
+      "src": "/donations/.*",
+      "dest": "./src/routes/donations.js"
+    },
+    {
+      "src": "/mitra/.*",
+      "dest": "./src/routes/mitra.js"
     }
   ]
 }
