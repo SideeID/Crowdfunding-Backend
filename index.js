@@ -27,6 +27,9 @@ app.use(
       'Content-Type',
       'Authorization',
       'Access-Control-Allow-Credentials',
+      'Access-Control-Allow-Origin',
+      'Access-Control-Allow-Headers',
+      'Access-Control-Allow-Methods',
     ],
   }),
 );
