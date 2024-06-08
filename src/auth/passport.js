@@ -1,17 +1,18 @@
 const passport = require('passport');
-const OAuth2Strategy = require('passport-google-oauth2').Strategy;
+// eslint-disable-next-line import/no-extraneous-dependencies
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const jwt = require('jsonwebtoken');
 const Userdb = require('../model/userSchema');
 
-const clientId = process.env.CLIENT_ID;
-const clientSecret = process.env.CLIENT_SECRET;
+const googleClientId = process.env.CLIENT_ID;
+const googleClientSecret = process.env.CLIENT_SECRET;
 const { JWT_SECRET } = process.env;
 
 passport.use(
-  new OAuth2Strategy(
+  new GoogleStrategy(
     {
-      clientID: clientId,
-      clientSecret,
+      clientID: googleClientId,
+      clientSecret: googleClientSecret,
       callbackURL:
         'https://crowdfunding-backend-drab.vercel.app/auth/google/callback',
       scope: ['email', 'profile'],
@@ -28,10 +29,14 @@ passport.use(
           });
           await user.save();
         }
+
         const token = jwt.sign({ id: user._id }, JWT_SECRET, {
-          expiresIn: '3h',
+          expiresIn: '1h',
         });
-        return done(null, { user, token });
+
+        user.token = token;
+
+        return done(null, user);
       } catch (error) {
         return done(error, null);
       }
@@ -39,12 +44,17 @@ passport.use(
   ),
 );
 
-passport.serializeUser((data, done) => done(null, { id: data.user.id, token: data.token }));
-passport.deserializeUser(async (data, done) => {
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
   try {
-    const user = await Userdb.findById(data.id);
-    return done(null, { user, token: data.token });
+    const user = await Userdb.findById(id);
+    done(null, user);
   } catch (error) {
-    return done(error, null);
+    done(error, null);
   }
 });
+
+module.exports = passport;
