@@ -24,7 +24,7 @@ app.use(
     origin: 'http://localhost:5173/',
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    // allowedHeaders: ['Content-Type', 'Authorization'],
   }),
 );
 // middleware untuk membaca body dari request
