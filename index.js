@@ -20,7 +20,9 @@ const PORT = process.env.PORT || 6005;
 
 app.use(
   cors({
-    origin: '*',
+    origin: (origin, callback) => {
+      callback(null, true);
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'],
     credentials: true,
     allowedHeaders: [
