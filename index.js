@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 6005;
 
 app.use(
   cors({
-    origin: '*',
+    origin: 'http://localhost:5173/',
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: ['Content-Type', 'Authorization'],
