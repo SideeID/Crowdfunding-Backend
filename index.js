@@ -46,7 +46,13 @@ app.use(
     secret: 'secret234563',
     resave: false,
     saveUninitialized: true,
-    // cookie: { secure: false },
+    // sameSite: 'None',
+    cookie: {
+      secure: true,
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24,
+      sameSite: 'None',
+    },
   }),
 );
 app.use(passport.initialize());
