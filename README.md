@@ -1,6 +1,7 @@
 # Crowdfunding Backend
 
-This repository contains the backend code for a crowdfunding platform. It provides APIs for user registration, login, Google OAuth2 authentication, and session management.
+This repository contains the backend code for a crowdfunding platform specifically designed to support fundraising efforts for **Palestine**. It provides a comprehensive set of APIs for user registration, login, Google OAuth2 authentication, session management, and integration with Midtrans for handling donations. The platform aims to facilitate secure and efficient fundraising and donor management.
+**#freepalestine**
 
 ## Features
 
