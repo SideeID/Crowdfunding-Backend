@@ -1,7 +1,8 @@
 # Crowdfunding Backend
 [![wakatime](https://wakatime.com/badge/user/018e8ea9-cdd5-49cd-bdc1-0e0377e41ae9/project/47e6aea3-2a39-4c5e-9a4a-53ba17e30535.svg)](https://wakatime.com/badge/user/018e8ea9-cdd5-49cd-bdc1-0e0377e41ae9/project/47e6aea3-2a39-4c5e-9a4a-53ba17e30535)
 
-This repository contains the backend code for a crowdfunding platform. It provides APIs for user registration, login, Google OAuth2 authentication, and session management.
+This repository contains the backend code for a crowdfunding platform specifically designed to support fundraising efforts for **Palestine**. It provides a comprehensive set of APIs for user registration, login, Google OAuth2 authentication, session management, and integration with Midtrans for handling donations. The platform aims to facilitate secure and efficient fundraising and donor management.
+**#freepalestine**
 
 ## Features
 
