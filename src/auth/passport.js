@@ -13,8 +13,7 @@ passport.use(
     {
       clientID: googleClientId,
       clientSecret: googleClientSecret,
-      callbackURL:
-        'https://crowdfunding-backend-drab.vercel.app/auth/google/callback',
+      callbackURL: 'https://crowdfunding-backend-drab.vercel.app/auth/google/callback',
       scope: ['email', 'profile'],
     },
     async (accessToken, refreshToken, profile, done) => {
