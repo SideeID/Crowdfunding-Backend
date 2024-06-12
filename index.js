@@ -18,37 +18,35 @@ const mitraRoutes = require('./src/routes/mitra');
 const app = express();
 const PORT = process.env.PORT || 6005;
 
-// app.use(
-//   cors({
-//     origin: (origin, callback) => {
-//       if (
-//         !origin
-//         || [
-//           'http://localhost:5173',
-//           'https://production.com',
-//         ].includes(origin)
-//       ) {
-//         callback(null, true);
-//       } else {
-//         callback(new Error('Not allowed by CORS'));
-//       }
-//     },
-//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'],
-//     credentials: true,
-//     allowedHeaders: [
-//       'Content-Type',
-//       'Authorization',
-//       'Access-Control-Allow-Credentials',
-//       'Access-Control-Allow-Origin',
-//       'Access-Control-Allow-Headers',
-//       'Origin',
-//       'X-Requested-With',
-//       'Accept',
-//     ],
-//   }),
-// );
-
-app.use(cors());
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (
+        !origin
+        || [
+          'http://localhost:5173',
+          'https://production.com',
+        ].includes(origin)
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'],
+    credentials: true,
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'Access-Control-Allow-Credentials',
+      'Access-Control-Allow-Origin',
+      'Access-Control-Allow-Headers',
+      'Origin',
+      'X-Requested-With',
+      'Accept',
+    ],
+  }),
+);
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -59,6 +57,8 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: {
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     },
   }),
 );
