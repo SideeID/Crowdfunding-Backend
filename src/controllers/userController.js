@@ -91,21 +91,14 @@ const loginUser = async (req, res) => {
     delete req.session.loginAttempts;
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '3h' });
 
-    if (user.role === 'admin') {
-      return res.status(200).json({
-        success: true,
-        message: 'Berhasil login sebagai admin',
-        token,
-        user,
-        redirectUrl: 'admin/dashboard',
-      });
-    }
     return res.status(200).json({
       success: true,
-      message: 'Berhasil login sebagai user',
+      message:
+        user.role === 'admin'
+          ? 'Berhasil login sebagai admin'
+          : 'Berhasil login sebagai user',
       token,
-      user,
-      redirectUrl: '/',
+      redirectUrl: user.role === 'admin' ? 'admin/dashboard' : '/',
     });
   } catch (error) {
     return res.status(500).json({
