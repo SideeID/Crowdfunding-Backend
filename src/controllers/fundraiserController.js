@@ -44,12 +44,10 @@ const createFundraiser = async (req, res) => {
   }
 };
 
-// jangan tampilkan fundraiser yang isClosed: true
 const getAllFundraisers = async (req, res) => {
   try {
-    const fundraisers = await Fundraiser.find({ isClosed: false })
+    const fundraisers = await Fundraiser.find()
       .populate('userId', 'displayName')
-      .populate('donations.user', 'displayName')
       .exec();
     return res.status(200).json({ success: true, fundraisers });
   } catch (error) {
