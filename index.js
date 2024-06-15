@@ -26,6 +26,7 @@ app.use(
           'http://localhost:5173',
           'http://localhost:6005',
           'https://crowdfunding-backend-drab.vercel.app',
+          'https://bersama-palestina.vercel.app',
         ].includes(origin)
       ) {
         callback(null, true);
