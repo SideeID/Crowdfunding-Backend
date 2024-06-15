@@ -68,7 +68,7 @@ const createDonation = async (req, res) => {
 };
 
 const handleNotification = async (req, res) => {
-  const { order_id, transaction_status, gross_amount } = req.body;
+  const { order_id, status_code, transaction_status } = req.body;
 
   try {
     if (
@@ -82,7 +82,7 @@ const handleNotification = async (req, res) => {
       if (!fundraiser) {
         return res.status(404).json({
           success: false,
-          message: 'Waduh Fundraiser tidak ditemukan',
+          message: 'Fundraiser tidak ditemukan',
         });
       }
 
@@ -90,12 +90,12 @@ const handleNotification = async (req, res) => {
       if (!donation) {
         return res.status(404).json({
           success: false,
-          message: 'Waduh Donasi tidak ditemukan',
+          message: 'Donasi tidak ditemukan',
         });
       }
 
       donation.status = 'completed';
-      fundraiser.collectedAmount += parseInt(gross_amount, 10);
+      fundraiser.collectedAmount += parseInt(donation.amount, 10);
       await fundraiser.save();
 
       return res.status(200).json({
@@ -103,7 +103,6 @@ const handleNotification = async (req, res) => {
         message: 'Notifikasi berhasil diproses',
       });
     }
-
     return res.status(400).json({
       success: false,
       message: 'Status transaksi tidak valid',

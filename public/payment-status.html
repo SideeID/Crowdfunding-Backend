@@ -16,7 +16,7 @@
 
     async function notifyBackend(orderId, statusCode, transactionStatus) {
       try {
-        const response = await fetch('/payment-notification/donation', {
+        const response = await fetch('/donations/notification', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

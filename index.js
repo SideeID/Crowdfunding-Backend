@@ -12,7 +12,6 @@ const userRoutes = require('./src/routes/users');
 const authRoutes = require('./src/routes/auth');
 const fundraiserRoutes = require('./src/routes/fundraiser');
 const donationRoutes = require('./src/routes/donation');
-const paymentRoutes = require('./src/routes/payment');
 const mitraRoutes = require('./src/routes/mitra');
 
 const app = express();
@@ -25,7 +24,8 @@ app.use(
         !origin
         || [
           'http://localhost:5173',
-          'https://production.com',
+          'http://localhost:6005',
+          'https://crowdfunding-backend-drab.vercel.app',
         ].includes(origin)
       ) {
         callback(null, true);
@@ -93,8 +93,6 @@ app.get('/', (req, res) => {
       <br>
       <li><strong>POST /donations</strong>: Membuat donasi baru.</li>
       <li><strong>POST /donations/notification</strong>: Menerima notifikasi dari Midtrans setelah transaksi donasi berhasil.</li>
-      <br>
-      <li><strong>POST /payment-notification/donation</strong>: Menerima notifikasi dari Midtrans setelah transaksi donasi berhasil dan mengirimkan notifikasi ke penggalangan dana.</li>
       <br>
       <li><strong>POST /mitra</strong>: Membuat mitra baru.</li>
       <li><strong>GET /mitra</strong>: Mendapatkan daftar mitra.</li>
@@ -181,7 +179,6 @@ app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
 app.use('/fundraisers', fundraiserRoutes);
 app.use('/donations', donationRoutes);
-app.use('/payment-notification', paymentRoutes);
 app.use('/mitra', mitraRoutes);
 
 app.listen(PORT, () => {
