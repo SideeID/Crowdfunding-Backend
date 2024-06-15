@@ -80,6 +80,15 @@ fundraiserSchema.pre('save', function (next) {
   next();
 });
 
+// fundraiserSchema.pre('save', function (next) {
+//   const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000);
+//   this.donations = this.donations.filter(
+//     (donation) => donation.status === 'completed'
+//       || (donation.status === 'pending' && donation.date > twoHoursAgo),
+//   );
+//   next();
+// });
+
 fundraiserSchema.virtual('remainingDays').get(function () {
   const now = new Date();
   const end = new Date(this.endDate);
