@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const Userdb = require('../model/userSchema');
+const Fundraiser = require('../model/fundraiserSchema');
 
 const { JWT_SECRET } = process.env;
 const MAX_LOGIN_ATTEMPTS = 5;
@@ -220,13 +221,25 @@ const deleteUser = async (req, res) => {
   const userId = req.params.id;
 
   try {
-    const user = await Userdb.findByIdAndDelete(userId);
+    const user = await Userdb.findById(userId);
     if (!user) {
       return res.status(404).json({
         success: false,
         message: 'Waduh User tidak ditemukan',
       });
     }
+
+    const fundraisers = await Fundraiser.find({ 'donations.user': userId });
+    fundraisers.forEach(async (fundraiser) => {
+      fundraiser.donations.forEach(async (donation) => {
+        if (donation.user.toString() === userId) {
+          donation.isAnonymous = true;
+          await fundraiser.save();
+        }
+      });
+    });
+
+    await Userdb.findByIdAndDelete(userId);
 
     return res.status(200).json({
       success: true,
