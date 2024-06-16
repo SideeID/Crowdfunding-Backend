@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./index.js",
+    "test": "newman run \"Bersama Palestina.postman_collection.json\" --environment \"Environment Bersama Palestina.postman_environment.json\"",
+    "start:dev": "nodemon ./index.js",
     "lint:fix": "eslint ./ --fix",
     "lint": "eslint ./"
   },
