@@ -66,111 +66,59 @@ app.use(passport.session());
 
 app.get('/', (req, res) => {
   res.send(`
-    <h1>API PENGGALANGAN DANA</h1>
-    <p>Berikut adalah dokumentasi sederhana untuk API yang telah dibuat:</p>
-    <h2>Endpoint</h2>
-    <ul>
-      <li><strong>GET /</strong>: Menampilkan dokumentasi API.</li>
-      <li><strong>POST /users/register</strong>: Mendaftarkan pengguna baru.</li>
-      <li><strong>POST /users/login</strong>: Login pengguna.</li>
-      <li><strong>PUT /users/:id</strong>: Memperbarui informasi pengguna berdasarkan ID.</li>
-      <li><strong>GET /users/:id</strong>: Mendapatkan detail pengguna berdasarkan ID.</li>
-      <li><strong>GET /users/profile</strong>: Mendapatkan profile pengguna yang sedang login</li>
-      <li><strong>DELETE /users/:id</strong>: Menghapus pengguna berdasarkan ID.</li>
-      <li><strong>GET /users</strong>: Mendapatkan semua daftar pengguna.</li>
-      <br>
-      <li><strong>GET /fundraisers</strong>: Mendapatkan daftar penggalangan dana.</li>
-      <li><strong>POST /fundraisers</strong>: Membuat penggalangan dana baru.</li>
-      <li><strong>GET /fundraisers/:id</strong>: Mendapatkan detail penggalangan dana berdasarkan ID.</li>
-      <li><strong>PUT /fundraisers/:id</strong>: Memperbarui informasi penggalangan dana berdasarkan ID.</li>
-      <li><strong>DELETE /fundraisers/:id</strong>: Menghapus penggalangan dana berdasarkan ID.</li>
-      <br>
-      <li><strong>GET /auth/google</strong>: Memulai proses autentikasi menggunakan Google OAuth2.</li>
-      <li><strong>GET /auth/google/callback</strong>: Callback URL setelah autentikasi Google berhasil atau gagal.</li>
-      <li><strong>GET /auth/login/success</strong>: Mengecek status autentikasi pengguna dan mengembalikan informasi pengguna yang telah diautentikasi.</li>
-      <li><strong>GET /auth/logout</strong>: Mengeluarkan pengguna dari sesi dan mengarahkan ke halaman utama.</li>
-      <br>
-      <li><strong>POST /donations</strong>: Membuat donasi baru.</li>
-      <li><strong>POST /donations/notification</strong>: Menerima notifikasi dari Midtrans setelah transaksi donasi berhasil.</li>
-      <br>
-      <li><strong>POST /mitra</strong>: Membuat mitra baru.</li>
-      <li><strong>GET /mitra</strong>: Mendapatkan daftar mitra.</li>
-      <li><strong>GET /mitra/:id</strong>: Mendapatkan detail mitra berdasarkan ID.</li>
-      <li><strong>PUT /mitra/:id</strong>: Memperbarui informasi mitra berdasarkan ID.</li>
-      <li><strong>DELETE /mitra/:id</strong>: Menghapus mitra berdasarkan ID.</li>
-    </ul>
-
-    <h2>Contoh Penggunaan</h2>
-    <p>Contoh penggunaan API Penggalangan Dana:</p>
-    <pre>
-      <code>
-      <h2>registrasi pengguna</h2>
-      POST /users/register
-      {
-        "displayName": "John Doe",
-        "email": "email@example.com",
-        "password": "password"
-      }
-
-      <h2>login pengguna</h2>
-      POST /users/login
-      {
-        "email": "email@example.com",
-        "password": "password"
-      }
-
-      <h2>update pengguna</h2>
-      PUT /users/:id
-      {
-        "displayName": "John Doe",
-        "email": "example@gmail.com",
-        "password": "password"
-      }
-
-      <h2>detail pengguna by ID</h2>
-      GET /users/:id
-
-      <h2>profile pengguna yang sedang login</h2>
-      GET /users/profile
-
-      <h2>hapus pengguna</h2>
-      DELETE /users/:id
-
-      <h2>daftar semua pengguna</h2>
-      GET /users
-
-      <h2>daftar penggalangan dana</h2>
-      GET /fundraisers
-
-      <h2>detail penggalangan dana by ID</h2>
-      GET /fundraisers/:id
-
-      <h2>buat penggalangan dana</h2>
-      POST /fundraisers
-      {
-        "title": "Your fundraiser title",
-        "description": "Describe your fundraiser in detail",
-        "goal": 1000000,
-        "image": "https://i.pinimg.com/564x/3c/a3/f0/3ca3f02e1ec3a6d2d30a6558b97add06.jpg",
-        "isClosed": false,
-        "endDate": "2024-12-31T23:59:59.000Z"
-      }
-
-      <h2>update penggalangan dana</h2>
-      PUT /fundraisers/:id
-      {
-        "title": "Your fundraiser title",
-        "description": "Describe your fundraiser in detail",
-        "goal": 1000000,
-        "image": "https://i.pinimg.com/564x/3c/a3/f0/3ca3f02e1ec3a6d2d30a6558b97add06.jpg",
-        "isClosed": false,
-        "endDate": "2024-12-31T23:59:59.000Z"
-      }
-
-      <h2>hapus penggalangan dana</h2>
-      DELETE /fundraisers/:id
-      </code>
-    </pre>
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>API Penggalangan Dana untuk Palestina</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+          }
+          .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 2em;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          }
+          h1 {
+            color: #333;
+          }
+          p {
+            color: #666;
+          }
+          .button {
+            display: inline-block;
+            margin-top: 1em;
+            padding: 0.5em 1em;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 1em;
+          }
+          .button:hover {
+            background-color: #0056b3;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Selamat datang di API Penggalangan dana untuk Palestina</h1>
+          <p>Terima kasih telah mengunjungi API kami. Kami berkomitmen untuk mendukung Palestina.</p>
+          <a href="https://bersama-palestina.vercel.app" class="button">Kunjungi Situs Kami</a>
+        </div>
+      </body>
+    </html>
   `);
 });
 
