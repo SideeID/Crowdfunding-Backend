@@ -16,6 +16,9 @@ This repository contains the backend code for a crowdfunding platform specifical
 
 ## Start Project
 
+> [!IMPORTANT]
+> Before starting, make sure you have Node.js and npm installed on your machine.
+
 1. Clone the repository
 
 ```
@@ -45,6 +48,10 @@ cp .env.example .env
 ```
 npm run start:dev
 ```
+
+> [!TIP]
+> For linting the code, use the following commands:
+
 Linting
 
 ```bash
@@ -56,6 +63,9 @@ Linting dan otomatis fix
 ```bash
   npm run lint-fix
 ```
+
+> [!NOTE]
+> For automatic testing, ensure you have newman installed:
 
 Automatic testing (install newman first)
 
@@ -73,6 +83,9 @@ The backend is deployed on Vercel and can be accessed at [https://crowdfunding-b
 > Postman API Documentation [click here](https://documenter.getpostman.com/view/35134769/2sA3XQh2H4)
 
 ## Endpoints
+
+> [!WARNING]
+> Some endpoints require authentication and proper permissions.
 
 | Endpoint                  | HTTP Method | Description |
 | ------------------------- | ----------- | ----------- |
@@ -105,6 +118,9 @@ The backend is deployed on Vercel and can be accessed at [https://crowdfunding-b
 - JSON Web Tokens (JWT)
 - Midtrans
 
-## Contributors
+## Authors
 
-- [Dimas Fajar](https://github.com/SideeID)
+- [@Side ID](https://github.com/SideeID)
+
+License
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/SideeID/Crowdfunding-Backend/blob/main/LICENSE.md) file for details.
