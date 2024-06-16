@@ -1,11 +1,21 @@
+/* eslint-disable no-shadow */
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { validationResult } = require('express-validator');
 const Userdb = require('../model/userSchema');
 
 const { JWT_SECRET } = process.env;
 const MAX_LOGIN_ATTEMPTS = 5;
 
 const registerUser = async (req, res) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      message: error.array(),
+    });
+  }
+
   const {
     displayName, email, password, role,
   } = req.body;
