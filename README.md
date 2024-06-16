@@ -14,9 +14,63 @@ This repository contains the backend code for a crowdfunding platform specifical
 - **Error Handling:** Proper error handling for various scenarios.
 - **CORS Configuration:** Supports Cross-Origin Resource Sharing (CORS) for frontend integration.
 
+## Start Project
+
+1. Clone the repository
+
+```
+git clone https://github.com/SideeID/Crowdfunding-Backend
+```
+
+2. Open Folder
+
+```
+cd Crowdfunding-Backend
+```
+
+3. Install Dependecies
+
+```
+npm install
+```
+
+4. Setting Up Environment
+
+```
+cp .env.example .env
+```
+
+5. Run Project
+
+```
+npm run start:dev
+```
+Linting
+
+```bash
+  npm run lint
+```
+
+Linting dan otomatis fix
+
+```bash
+  npm run lint-fix
+```
+
+Automatic testing (install newman first)
+
+```bash
+  npm install newman --global
+  npm run test
+```
+
 ## Deployment
 
 The backend is deployed on Vercel and can be accessed at [https://crowdfunding-backend-drab.vercel.app/](https://crowdfunding-backend-drab.vercel.app/).
+
+## API Documentation
+
+> Postman API Documentation [click here](https://documenter.getpostman.com/view/35134769/2sA3XQh2H4)
 
 ## Endpoints
 
@@ -50,13 +104,6 @@ The backend is deployed on Vercel and can be accessed at [https://crowdfunding-b
 - Bcrypt.js
 - JSON Web Tokens (JWT)
 - Midtrans
-
-## Usage
-
-1. Clone the repository.
-2. Install dependencies using `npm install`.
-3. Set up environment variables in a `.env` file.
-4. Run the server using `npm start`.
 
 ## Contributors
 
