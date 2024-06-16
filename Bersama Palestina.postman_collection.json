@@ -1,0 +1,798 @@
+{
+	"info": {
+		"_postman_id": "a2146f08-3a54-4200-b929-7ccfeca3c18c",
+		"name": "Bersama Palestina",
+		"description": "<img src=\"https://content.pstmn.io/ece4d3be-8c7b-4d45-8e51-8c9e25f7a0b0/bG9nb3NkZnNkZi5wbmc=\">\n\nCollections untuk menguji platform crowdfunding yang dirancang khusus untuk mendukung upaya penggalangan dana untuk **Palestina.**",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "35134769"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "Register User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"  pm.response.to.have.status(201);",
+									"});",
+									"pm.test('Response should have success property', function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData).to.have.property('success', true);",
+									"  pm.environment.set('userId', jsonData.user._id);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"displayName\": \"Side ID\",\n  \"email\": \"sideid@gmail.com\",\n  \"password\": \"password123\",\n  \"role\": \"user\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Response should have success property', function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData).to.have.property('success', true);",
+									"  pm.environment.set('token', jsonData.token);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@gmail.com\",\n  \"password\": \"admin123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User By ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Response should have success property', function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData).to.have.property('success', true);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/{{userId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Response should have success property', function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData).to.have.property('success', true);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"displayName\": \"Side ID\",\n  \"email\": \"newsideid@gmail.com\",\n  \"password\": \"newpassword123\",\n  \"role\": \"user\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/{{userId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Response should have success property', function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData).to.have.property('success', true);",
+									"  pm.expect(jsonData).to.have.property('users');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Response should have success property', function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData).to.have.property('success', true);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/{{userId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Folder ini berisi serangkaian endpoint yang digunakan untuk pengelolaan pengguna. Fungsionalitas yang tersedia meliputi registrasi, login, mendapatkan detail pengguna berdasarkan ID, memperbarui informasi pengguna, mendapatkan daftar semua pengguna, dan menghapus pengguna."
+		},
+		{
+			"name": "mitra",
+			"item": [
+				{
+					"name": "Create Mitra",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"  pm.response.to.have.status(201);",
+									"});",
+									"pm.test('Response should have success property', function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData).to.have.property('success', true);",
+									"  pm.environment.set('mitraId', jsonData.mitra._id);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Mitra test\",\n  \"image\": \"http://example.com/image.jpg\",\n  \"campaign\": \"Campaign 1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/mitra",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"mitra"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Mitra",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Response should have success property', function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData).to.have.property('success', true);",
+									"  pm.expect(jsonData).to.have.property('mitra');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/mitra",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"mitra"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Mitra By ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Response should have success property', function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData).to.have.property('success', true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/mitra/{{mitraId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"mitra",
+								"{{mitraId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Mitra",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Response should have success property', function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData).to.have.property('success', true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Updated Mitra\",\n  \"image\": \"http://example.com/newimage.jpg\",\n  \"campaign\": \"Updated Campaign\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/mitra/{{mitraId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"mitra",
+								"{{mitraId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Mitra",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Response should have success property', function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData).to.have.property('success', true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/mitra/{{mitraId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"mitra",
+								"{{mitraId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Folder ini berisi serangkaian endpoint yang digunakan untuk pengelolaan mitra. Fungsionalitas yang tersedia meliputi Create, mendapatkan detail Mitra berdasarkan ID, memperbarui informasi Mitra, mendapatkan daftar semua Mitra, dan menghapus Mitra."
+		},
+		{
+			"name": "fundraiser",
+			"item": [
+				{
+					"name": "Create Fundraiser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"  pm.response.to.have.status(201);",
+									"});",
+									"pm.test('Response should have success property', function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData).to.have.property('success', true);",
+									"  pm.environment.set('fundraiserId', jsonData.fundraiser._id);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Fundraiser test\",\n  \"description\": \"Description for fundraiser test\",\n  \"goal\": 1000,\n  \"image\": \"http://example.com/image.jpg\",\n  \"endDate\": \"2024-12-31\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/fundraisers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fundraisers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Fundraisers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Response should have success property', function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData).to.have.property('success', true);",
+									"  pm.expect(jsonData).to.have.property('fundraisers');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/fundraisers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fundraisers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Fundraiser By ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Response should have success property', function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData).to.have.property('success', true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/fundraisers/{{fundraiserId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fundraisers",
+								"{{fundraiserId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Fundraiser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Response should have success property', function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData).to.have.property('success', true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Updated Fundraiser\",\n  \"description\": \"Updated description for fundraiser\",\n  \"goal\": 2000,\n  \"image\": \"http://example.com/newimage.jpg\",\n  \"endDate\": \"2024-12-31\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/fundraisers/{{fundraiserId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fundraisers",
+								"{{fundraiserId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Donation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test('status code is 201', function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response should be successful', function () {\r",
+									"    pm.expect(jsonData).to.have.property('success', true);\r",
+									"});\r",
+									"\r",
+									"pm.test('Order ID should be present', function () {\r",
+									"    pm.expect(jsonData.data.orderId).to.not.be.undefined;\r",
+									"})\r",
+									"\r",
+									"pm.test('Redirect URL should be present', function () {\r",
+									"    pm.expect(jsonData.data.redirectUrl).to.not.be.undefined;\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fundraiserId\": \"{{fundraiserId}}\",\r\n    \"amount\": \"50000\",\r\n    \"isAnonymous\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/donations",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"donations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Fundraiser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Response should have success property', function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData).to.have.property('success', true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/fundraisers/{{fundraiserId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fundraisers",
+								"{{fundraiserId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Folder ini berisi serangkaian endpoint yang digunakan untuk pengelolaan Fundraiser. Fungsionalitas yang tersedia meliputi pembuatan fundraiser, mendapatkan semua data fundraiser, mendapatkan data fundraiser berdasarkan ID, update data fundraiser, dan menghapus data fundraiser"
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:6005"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "mitraId",
+			"value": ""
+		},
+		{
+			"key": "fundraiserId",
+			"value": ""
+		}
+	]
+}
