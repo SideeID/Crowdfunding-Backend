@@ -98,7 +98,7 @@ const loginUser = async (req, res) => {
     }
 
     delete req.session.loginAttempts;
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '3h' });
+    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '24h' });
 
     return res.status(200).json({
       success: true,
