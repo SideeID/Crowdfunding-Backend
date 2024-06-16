@@ -123,6 +123,7 @@ The backend is deployed on Vercel and can be accessed at [https://crowdfunding-b
 
 - Node.js
 - Express.js
+- Exprress Validator
 - MongoDB
 - Passport.js
 - OAuth2
