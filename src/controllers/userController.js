@@ -1,7 +1,8 @@
+/* eslint-disable no-shadow */
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const Userdb = require('../model/userSchema');
 const { validationResult } = require('express-validator');
+const Userdb = require('../model/userSchema');
 
 const { JWT_SECRET } = process.env;
 const MAX_LOGIN_ATTEMPTS = 5;

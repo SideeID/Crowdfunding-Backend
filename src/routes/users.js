@@ -35,11 +35,10 @@ router.get(
   '/admin/dashboard',
   authMiddleware,
   roleMiddleware('admin'),
-  (req, res) =>
-    res.status(200).json({
-      success: true,
-      message: 'Admin dashboard',
-    })
+  (req, res) => res.status(200).json({
+    success: true,
+    message: 'Admin dashboard',
+  }),
 );
 
 module.exports = router;
