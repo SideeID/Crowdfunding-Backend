@@ -10,8 +10,6 @@ const registerUser = async (req, res) => {
     displayName, email, password, role,
   } = req.body;
 
-  console.log('Registering user:', req.body);
-
   if (!displayName || !email || !password) {
     return res.status(400).json({
       success: false,
