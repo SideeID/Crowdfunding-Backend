@@ -1,7 +1,16 @@
+/* eslint-disable no-shadow */
+const { validationResult } = require('express-validator');
 const Fundraiser = require('../model/fundraiserSchema');
 const Mitra = require('../model/mitraSchema');
 
 const createFundraiser = async (req, res) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      message: error.array(),
+    });
+  }
   const {
     title, description, image, isClosed, endDate, goal,
   } = req.body;
@@ -97,6 +106,13 @@ const getFundraiserById = async (req, res) => {
 };
 
 const updateFundraiser = async (req, res) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      message: error.array(),
+    });
+  }
   const { id } = req.params;
   const {
     title, description, image, isClosed, endDate, goal, mitraId,

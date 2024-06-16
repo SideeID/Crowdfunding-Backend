@@ -22,6 +22,7 @@ router.post('/register', [
     .isLength({ min: 6 })
     .withMessage('Password minimal 6 karakter'),
 ], registerUser);
+
 router.post('/login', loginUser);
 
 router.get('/profile', authMiddleware, getOwnProfile);
