@@ -123,5 +123,6 @@ The backend is deployed on Vercel and can be accessed at [https://crowdfunding-b
 
 - [@Side ID](https://github.com/SideeID)
 
-License
+## License
+
 This project is licensed under the MIT License - see the [LICENSE](https://github.com/SideeID/Crowdfunding-Backend/blob/main/LICENSE.md) file for details.
