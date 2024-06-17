@@ -118,6 +118,7 @@ The backend is deployed on Vercel and can be accessed at [https://crowdfunding-b
 | /fundraisers/:id          | PUT         | Memperbarui data penggalangan dana (Middleware). |
 | /fundraisers/:id          | DELETE      | Menghapus data penggalangan dana (Middleware). |
 | /donations                | POST        | Menambahkan data donasi. |
+| /donations/notification   | POST        | Menangani notifikasi pembayaran dari Midtrans.  |
 
 ## Technologies Used
 
