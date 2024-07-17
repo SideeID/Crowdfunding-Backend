@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+const logger = require('../utils/logger');
 const Fundraiser = require('../model/fundraiserSchema');
 const { createTransaction } = require('../utils/midtrans');
 
@@ -7,6 +8,7 @@ const createDonation = async (req, res) => {
   const { user } = req;
 
   if (!fundraiserId || !amount) {
+    logger.error('Fundraiser ID dan amount harus diisi');
     return res.status(400).json({
       success: false,
       message: 'Fundraiser ID dan amount harus diisi',
@@ -16,6 +18,7 @@ const createDonation = async (req, res) => {
   try {
     const fundraiser = await Fundraiser.findById(fundraiserId);
     if (!fundraiser) {
+      logger.warn(`Fundraiser tidak ditemukan: ${fundraiserId}`);
       return res.status(404).json({
         success: false,
         message: 'Waduh Fundraiser tidak ditemukan',
@@ -23,6 +26,7 @@ const createDonation = async (req, res) => {
     }
 
     if (fundraiser.isClosed) {
+      logger.warn(`Fundraiser sudah ditutup: ${fundraiserId}`);
       return res.status(400).json({
         success: false,
         message: 'Fundraiser sudah ditutup',
@@ -30,6 +34,7 @@ const createDonation = async (req, res) => {
     }
 
     if (fundraiser.endDate < new Date()) {
+      logger.warn(`Fundraiser sudah berakhir: ${fundraiserId}`);
       return res.status(400).json({
         success: false,
         message: 'Fundraiser sudah berakhir',
@@ -50,6 +55,9 @@ const createDonation = async (req, res) => {
     });
 
     await fundraiser.save();
+    logger.info(
+      `Transaksi donasi berhasil dibuat: orderId=${orderId}, user=${user._id}, amount=${amount}`,
+    );
 
     return res.status(201).json({
       success: true,
@@ -60,6 +68,7 @@ const createDonation = async (req, res) => {
       },
     });
   } catch (error) {
+    logger.error(`Error creating donation: ${error.message}`);
     return res.status(500).json({
       success: false,
       message: error.message,
@@ -80,6 +89,7 @@ const handleNotification = async (req, res) => {
       });
 
       if (!fundraiser) {
+        logger.warn(`Fundraiser tidak ditemukan untuk orderId: ${order_id}`);
         return res.status(404).json({
           success: false,
           message: 'Fundraiser tidak ditemukan',
@@ -88,6 +98,7 @@ const handleNotification = async (req, res) => {
 
       const donation = fundraiser.donations.find((d) => d.orderId === order_id);
       if (!donation) {
+        logger.warn(`Donasi tidak ditemukan untuk orderId: ${order_id}`);
         return res.status(404).json({
           success: false,
           message: 'Donasi tidak ditemukan',
@@ -98,16 +109,24 @@ const handleNotification = async (req, res) => {
       fundraiser.collectedAmount += parseInt(donation.amount, 10);
       await fundraiser.save();
 
+      logger.info(
+        `Notifikasi berhasil diproses: orderId=${order_id}, amount=${donation.amount}`,
+      );
+
       return res.status(200).json({
         success: true,
         message: 'Notifikasi berhasil diproses',
       });
     }
+    logger.warn(
+      `Status transaksi tidak valid: orderId=${order_id}, status=${transaction_status}`,
+    );
     return res.status(400).json({
       success: false,
       message: 'Status transaksi tidak valid',
     });
   } catch (error) {
+    logger.error(`Error handling notification: ${error.message}`);
     return res.status(500).json({
       success: false,
       message: error.message,

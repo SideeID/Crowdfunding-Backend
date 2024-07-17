@@ -2,21 +2,25 @@
 const { validationResult } = require('express-validator');
 const Fundraiser = require('../model/fundraiserSchema');
 const Mitra = require('../model/mitraSchema');
+const logger = require('../utils/logger');
 
 const createFundraiser = async (req, res) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
+    logger.error(`Validation errors: ${JSON.stringify(error.array())}`);
     return res.status(400).json({
       success: false,
       message: error.array(),
     });
   }
+
   const {
     title, description, image, isClosed, endDate, goal,
   } = req.body;
   const mitraId = req.user._id;
 
   if (!title || !description || !image || !endDate || !goal || !mitraId) {
+    logger.error('Harap isi semua bidang coy!');
     return res
       .status(400)
       .json({ success: false, message: 'Harap isi semua bidang coy!' });
@@ -39,12 +43,14 @@ const createFundraiser = async (req, res) => {
       $push: { fundraisers: fundraiser._id },
     });
 
+    logger.info(`Penggalangan dana berhasil dibuat: ${fundraiser._id}`);
     return res.status(201).json({
       success: true,
       message: 'Penggalangan dana berhasil dibuat',
       fundraiser,
     });
   } catch (error) {
+    logger.error(`Error creating fundraiser: ${error.message}`);
     return res.status(500).json({
       success: false,
       message: 'Terjadi kesalahan pada server',
@@ -105,20 +111,94 @@ const getFundraiserById = async (req, res) => {
   }
 };
 
+// const updateFundraiser = async (req, res) => {
+//   const error = validationResult(req);
+//   if (!error.isEmpty()) {
+//     return res.status(400).json({
+//       success: false,
+//       message: error.array(),
+//     });
+//   }
+//   const { id } = req.params;
+//   const {
+//     title, description, image, isClosed, endDate, goal, mitraId,
+//   } = req.body;
+
+//   if (!title && !description && !image && !isClosed && !endDate && !goal && !mitraId) {
+//     logger.error('Harap isi setidaknya satu bidang coy!');
+//     return res.status(400).json({
+//       success: false,
+//       message: 'Harap isi setidaknya satu bidang coy!',
+//     });
+//   }
+
+//   try {
+//     const fundraiser = await Fundraiser.findByIdAndUpdate(
+//       id,
+//       {
+//         title,
+//         description,
+//         image,
+//         isClosed,
+//         endDate,
+//         goal,
+//         mitraId,
+//       },
+//       { new: true },
+//     );
+
+//     Mitra.findByIdAndUpdate(mitraId, {
+//       $push: { fundraisers: fundraiser._id },
+//     });
+
+//     if (!fundraiser) {
+//       return res.status(404).json({
+//         success: false,
+//         message: 'Waduh Penggalangan dana tidak ditemukan',
+//       });
+//     }
+
+//     return res.status(200).json({
+//       success: true,
+//       message: 'Penggalangan dana berhasil diperbarui',
+//       fundraiser,
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       success: false,
+//       message: 'Terjadi kesalahan pada server',
+//       error: error.message,
+//     });
+//   }
+// };
+
 const updateFundraiser = async (req, res) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
+    logger.error('Validation error during fundraiser update', {
+      errors: error.array(),
+    });
     return res.status(400).json({
       success: false,
       message: error.array(),
     });
   }
+
   const { id } = req.params;
   const {
     title, description, image, isClosed, endDate, goal, mitraId,
   } = req.body;
 
-  if (!title && !description && !image && !isClosed && !endDate && !goal && !mitraId) {
+  if (
+    !title
+    && !description
+    && !image
+    && !isClosed
+    && !endDate
+    && !goal
+    && !mitraId
+  ) {
+    logger.error('Attempt to update fundraiser with no fields provided');
     return res.status(400).json({
       success: false,
       message: 'Harap isi setidaknya satu bidang coy!',
@@ -129,22 +209,18 @@ const updateFundraiser = async (req, res) => {
     const fundraiser = await Fundraiser.findByIdAndUpdate(
       id,
       {
-        title,
-        description,
-        image,
-        isClosed,
-        endDate,
-        goal,
-        mitraId,
+        title, description, image, isClosed, endDate, goal, mitraId,
       },
       { new: true },
     );
 
-    Mitra.findByIdAndUpdate(mitraId, {
-      $push: { fundraisers: fundraiser._id },
-    });
-
-    if (!fundraiser) {
+    if (fundraiser) {
+      await Mitra.findByIdAndUpdate(mitraId, {
+        $push: { fundraisers: fundraiser._id },
+      });
+      logger.info('Fundraiser updated successfully', { fundraiserId: id });
+    } else {
+      logger.warn('Fundraiser not found', { fundraiserId: id });
       return res.status(404).json({
         success: false,
         message: 'Waduh Penggalangan dana tidak ditemukan',
@@ -157,6 +233,9 @@ const updateFundraiser = async (req, res) => {
       fundraiser,
     });
   } catch (error) {
+    logger.error('Server error during fundraiser update', {
+      error: error.message,
+    });
     return res.status(500).json({
       success: false,
       message: 'Terjadi kesalahan pada server',
@@ -171,17 +250,20 @@ const deleteFundraiser = async (req, res) => {
   try {
     const fundraiser = await Fundraiser.findByIdAndDelete(id);
     if (!fundraiser) {
+      logger.warn(`Penggalangan dana tidak ditemukan: ${id}`);
       return res.status(404).json({
         success: false,
         message: 'Waduh Penggalangan dana tidak ditemukan',
       });
     }
 
+    logger.info(`Penggalangan dana berhasil dihapus: ${id}`);
     return res.status(200).json({
       success: true,
       message: 'Penggalangan dana berhasil dihapus',
     });
   } catch (error) {
+    logger.error(`Error deleting fundraiser: ${id}, ${error.message}`);
     return res.status(500).json({
       success: false,
       message: 'Terjadi kesalahan pada server',

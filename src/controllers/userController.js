@@ -2,6 +2,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
+const logger = require('../utils/logger');
 const Userdb = require('../model/userSchema');
 const Fundraiser = require('../model/fundraiserSchema');
 
@@ -64,6 +65,7 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
+    logger.error('Harap isi semua bidang coy!');
     return res.status(400).json({
       success: false,
       message: 'Harap isi semua bidang coy!',
@@ -73,6 +75,7 @@ const loginUser = async (req, res) => {
   try {
     const user = await Userdb.findOne({ email });
     if (!user) {
+      logger.warn(`Upaya login dengan email yang tidak ada: ${email}`);
       return res.status(400).json({
         success: false,
         message: 'Email tidak ditemukan',
@@ -84,7 +87,14 @@ const loginUser = async (req, res) => {
       req.session.loginAttempts = req.session.loginAttempts
         ? req.session.loginAttempts + 1
         : 1;
+      logger.warn(
+        `Password yang salah: ${email}, Attempts: ${req.session.loginAttempts}`,
+      );
+
       if (req.session.loginAttempts >= MAX_LOGIN_ATTEMPTS) {
+        logger.warn(
+          `Upaya login dengan password yang salah lebih dari ${MAX_LOGIN_ATTEMPTS} kali: ${email}`,
+        );
         return res.status(401).json({
           success: false,
           attempts: req.session.loginAttempts,
@@ -92,6 +102,7 @@ const loginUser = async (req, res) => {
             'Masukin passwordnya bener dong! Gitu aja ga bisa, lihat tu tetangga sebelah udah pada nikah semua, lu masih aja ga bisa login, yang bener aja!',
         });
       }
+
       return res
         .status(400)
         .json({ success: false, message: 'Passwordnya salah' });
@@ -99,6 +110,8 @@ const loginUser = async (req, res) => {
 
     delete req.session.loginAttempts;
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '24h' });
+
+    logger.info(`User berhasil login: ${email}`);
 
     return res.status(200).json({
       success: true,
@@ -110,6 +123,7 @@ const loginUser = async (req, res) => {
       redirectUrl: user.role === 'admin' ? 'admin/dashboard' : '/',
     });
   } catch (error) {
+    logger.error(`Server error during login: ${error.message}`);
     return res.status(500).json({
       success: false,
       message: 'Terjadi kesalahan pada server',
@@ -153,6 +167,7 @@ const updateUser = async (req, res) => {
   try {
     const user = await Userdb.findById(userId);
     if (!user) {
+      logger.warn(`User tidak ditemukan: ${userId}`);
       return res.status(404).json({
         success: false,
         message: 'Waduh User tidak ditemukan',
@@ -160,6 +175,7 @@ const updateUser = async (req, res) => {
     }
 
     if (!displayName && !email && !password && !image && !role) {
+      logger.warn(`Tidak ada bidang yang diisi untuk user: ${userId}`);
       return res.status(400).json({
         success: false,
         message: 'Harap isi setidaknya satu bidang coy!',
@@ -176,6 +192,7 @@ const updateUser = async (req, res) => {
     if (role) user.role = role;
 
     await user.save();
+    logger.info(`Profil pengguna berhasil diperbarui: ${userId}`);
 
     return res.status(200).json({
       success: true,
@@ -183,6 +200,7 @@ const updateUser = async (req, res) => {
       user,
     });
   } catch (error) {
+    logger.error(`Error updating user: ${userId}, ${error.message}`);
     return res.status(500).json({
       success: false,
       message: 'Terjadi kesalahan pada server',
@@ -223,6 +241,7 @@ const deleteUser = async (req, res) => {
   try {
     const user = await Userdb.findById(userId);
     if (!user) {
+      logger.warn(`User tidak ditemukan: ${userId}`);
       return res.status(404).json({
         success: false,
         message: 'Waduh User tidak ditemukan',
@@ -234,14 +253,17 @@ const deleteUser = async (req, res) => {
       { $set: { 'donations.$[elem].isAnonymous': true } },
       { arrayFilters: [{ 'elem.user': userId }] },
     );
+    logger.info(`Donasi user ${userId} diubah menjadi anonim`);
 
     await Userdb.findByIdAndDelete(userId);
+    logger.info(`User berhasil dihapus: ${userId}`);
 
     return res.status(200).json({
       success: true,
       message: 'User berhasil dihapus',
     });
   } catch (error) {
+    logger.error(`Error deleting user: ${userId}, ${error.message}`);
     return res.status(500).json({
       success: false,
       message: 'Terjadi kesalahan pada server',
