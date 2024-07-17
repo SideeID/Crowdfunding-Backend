@@ -24,7 +24,9 @@
     "mongoose": "^8.4.0",
     "nodemon": "^3.1.0",
     "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "winston": "^3.13.1",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "eslint": "^8.57.0",
