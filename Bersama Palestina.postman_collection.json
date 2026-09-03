@@ -529,7 +529,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"title\": \"Fundraiser test\",\n  \"description\": \"Description for fundraiser test\",\n  \"goal\": 1000,\n  \"image\": \"http://example.com/image.jpg\",\n  \"endDate\": \"2024-12-31\"\n}",
+							"raw": "{\n  \"title\": \"Fundraiser test\",\n  \"description\": \"Description for fundraiser test\",\n  \"goal\": 1000,\n  \"image\": \"http://example.com/image.jpg\",\n  \"endDate\": \"{{futureEndDate}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -648,7 +648,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"title\": \"Updated Fundraiser\",\n  \"description\": \"Updated description for fundraiser\",\n  \"goal\": 2000,\n  \"image\": \"http://example.com/newimage.jpg\",\n  \"endDate\": \"2024-12-31\"\n}",
+							"raw": "{\n  \"title\": \"Updated Fundraiser\",\n  \"description\": \"Updated description for fundraiser\",\n  \"goal\": 2000,\n  \"image\": \"http://example.com/newimage.jpg\",\n  \"endDate\": \"{{futureEndDate}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -771,6 +771,22 @@
 				}
 			],
 			"description": "Folder ini berisi serangkaian endpoint yang digunakan untuk pengelolaan Fundraiser. Fungsionalitas yang tersedia meliputi pembuatan fundraiser, mendapatkan semua data fundraiser, mendapatkan data fundraiser berdasarkan ID, update data fundraiser, dan menghapus data fundraiser"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// endDate harus selalu di masa depan, kalau tidak endpoint donasi",
+					"// akan menolak dengan 400 'Fundraiser sudah berakhir'.",
+					"const endDate = new Date();",
+					"endDate.setFullYear(endDate.getFullYear() + 1);",
+					"pm.collectionVariables.set('futureEndDate', endDate.toISOString().split('T')[0]);"
+				],
+				"packages": {}
+			}
 		}
 	],
 	"variable": [
